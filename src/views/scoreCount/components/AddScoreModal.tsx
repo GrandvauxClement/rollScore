@@ -1,6 +1,7 @@
 import React from "react";
 import {Appbar, Button, Dialog, List, Portal, TextInput} from "react-native-paper";
 import {StyleSheet} from "react-native";
+import Calculator from "../../../components/calculator/Calculator";
 
 type AddScoreModalType = {
     addScore: any,
@@ -10,28 +11,21 @@ type AddScoreModalType = {
 }
 
 const AddScoreModal = ({addScore, visible, setVisible, scoreInfo} : AddScoreModalType): JSX.Element => {
-
+    console.log("Score info --> ", scoreInfo);
     return (
             <Portal>
-                <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+                <Dialog visible={visible} onDismiss={() => setVisible(false)} style={{width: "100%", marginHorizontal: 3}}>
                     <Appbar.Header elevated={true} style={sylesAddScoreModal.appBar}>
                         <Appbar.BackAction
-                            onPress={() => (setVisible(false))}
+                            onPress={() => setVisible(false)}
                         />
                         <Appbar.Content title={`${scoreInfo.namePlayer} - Tour : ${scoreInfo.turn}`}/>
-                        <Appbar.Action icon={"calendar"} />
                     </Appbar.Header>
-                    <Dialog.Title>Ajouter les joueurs</Dialog.Title>
                     <Dialog.Content>
-                        <TextInput
-                            label={"Nom du joueur"}
-                            value={`nom : ${scoreInfo.namePlayer} - tour: ${scoreInfo.turn} - value : ${scoreInfo.score}`}
-                          //  onChangeText={text => setText(text)}
-                        />
+                        <Calculator />
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={() => setVisible(false)}>Fermer</Button>
-                     {/*   <Button onPress={beginGame}>Commencer la partie</Button>*/}
                     </Dialog.Actions>
                 </Dialog>
             </Portal>

@@ -2,7 +2,6 @@ import { View} from "react-native";
 import {styles} from "../../generalStyle";
 import {useState} from "react";
 import DialogStartGame from "./components/DialogStartGame";
-import {Text} from "react-native-paper";
 import PlayersArea from "./components/PlayersArea";
 
 type ScoreCountProps = {
