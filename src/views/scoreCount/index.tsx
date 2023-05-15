@@ -26,6 +26,7 @@ const ScoreCount = ({navigation, route}: ScoreCountProps): JSX.Element => {
                 /> :
                 <PlayersArea
                     players={players}
+                    setPlayers={setPlayers}
                 />
             }
 

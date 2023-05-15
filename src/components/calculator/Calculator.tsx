@@ -4,10 +4,14 @@ import OperatorButton from "./OperatorButton";
 import {Text} from "react-native-paper";
 
 type Operator = 'addition'|'subtraction'|'multiplication'| 'division';
+type CalculatorType = {
+    handleUpdateScoreInfo: Function,
+    defaultScore: number
+}
 
-const Calculator = (): JSX.Element => {
+const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, defaultScore}): JSX.Element => {
 
-    const [score, setScore] = React.useState<number>(null);
+    const [score, setScore] = React.useState<number>(defaultScore);
     const [operation, setOperation] = React.useState<Operator>(null);
     const [numberEnter, setNumberEnter] = React.useState<number>(0);
     const [historyCalcul, setHistoryCalcul] = React.useState<any[]>([0]);
@@ -15,6 +19,12 @@ const Calculator = (): JSX.Element => {
     const concatenateTwoNumber = (number1: number, number2: number) => {
         return parseInt(number1.toString() + number2.toString());
     }
+
+    React.useEffect(() => {
+        // When user selected change default score too so reset score display by calculator
+        setScore(defaultScore);
+        console.log("###################################### Use effect reset score !! :) ")
+    }, [defaultScore])
 
     const displayMethodInResume = (value: number | Operator) => {
         if (typeof value === 'number'){
@@ -33,8 +43,7 @@ const Calculator = (): JSX.Element => {
     }
 
     const updateHistoryCalcul = (isOperator: boolean, value : string|number, isAdd: boolean = true) => {
-        console.log("======================== updateHistoryCalcul ACUTAL --> ",historyCalcul)
-        console.log("New value received --> ",value)
+
         let tempHistory = historyCalcul;
         if (isOperator && typeof value === 'string'){
             if (typeof tempHistory[tempHistory.length- 1] === 'string'){
@@ -44,23 +53,19 @@ const Calculator = (): JSX.Element => {
             }
         } else {
             // if last index as string add new number
-            console.log("test laast value for number received --> ", tempHistory[tempHistory.length- 1])
             if (typeof tempHistory[tempHistory.length- 1] === 'string'){
-                console.log("ICICIIIIIIIIIIIIIIIIIII")
                 tempHistory.push(value);
             }else{
                 //We need to update last number
                 tempHistory[tempHistory.length- 1] = value;
             }
-
         }
-        console.log("Set history --> ",tempHistory)
         setHistoryCalcul(tempHistory);
     }
     // Method to update score,
     const handleUpdateScore = (value: number) => {
         // If score null set score by first value selected
-        if (score === null){
+        if (score === 0){
             setScore(value);
             setNumberEnter(value);
             updateHistoryCalcul(false, value, true)
@@ -75,9 +80,6 @@ const Calculator = (): JSX.Element => {
             if(operation === null){
                 setScore(concatenateTwoNumber(score, value))
             } else if (operation === 'addition'){
-                console.log("IN ADDITION !! :) actual scpre --> ", score);
-                console.log("New vaalue to add", tempNumberEnter);
-                console.log('Calcul === -> ', score+tempNumberEnter)
                 setScore(score + tempNumberEnter)
             } else if (operation === 'subtraction'){
                 setScore(score - tempNumberEnter)
@@ -98,7 +100,7 @@ const Calculator = (): JSX.Element => {
     }
 
     const handleResetScore = () => {
-        setScore(null)
+        setScore(0)
     };
 
     const handleRemoveLastOperation = () => {
@@ -107,7 +109,7 @@ const Calculator = (): JSX.Element => {
 
     return (
         <View style={{backgroundColor: 'light'}}>
-            <View style={{height: 60, alignItems: 'flex-end',  justifyContent: 'center'}}>
+            <View style={{height: 60, alignItems: 'flex-end', justifyContent: 'center'}}>
                 <Text variant={'titleLarge'}>
                     {score === null ? 0 : score}
                 </Text>
@@ -262,13 +264,13 @@ const Calculator = (): JSX.Element => {
                 />
                 <OperatorButton
                     value={'OK'}
-                    handleClick={null}
+                    handleClick={() => handleUpdateScoreInfo(score === null ? 0 : score, true)}
                     specialWidth={false}
                     isOperator={false}
                 />
                 <OperatorButton
                     value={'Next'}
-                    handleClick={null}
+                    handleClick={() => handleUpdateScoreInfo(score === null ? 0 : score, false)}
                     specialWidth={false}
                     isOperator={true}
                 />

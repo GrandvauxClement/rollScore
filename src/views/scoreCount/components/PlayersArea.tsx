@@ -5,58 +5,73 @@ import {styles} from "../../../generalStyle";
 import AddScoreModal from "./AddScoreModal";
 
 type PlayersAreaType = {
-    players: Array<Player>
+    players: Player[],
+    setPlayers: Function
+}
+
+export type PlayerUpdateScore = {
+    turn: number,
+    newScore: number[],
+    indexUserSelected: number,
 }
 
 const optionsPerPage = [2, 3, 4];
 
 const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
-
+    console.log("Players !!! ", players);
     const [page, setPage] = useState<number>(0);
     const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
     const [arrayScore, setArrayScore] = useState<Array<any>>([])
-    const [totalScore, setTotalScore] = useState<Array<any>>([])
-    const [playerUpdateScoreSelected, setPlayerUpdateScore] = useState({
+   // const [totalScore, setTotalScore] = useState<Array<any>>([])
+    const [playerUpdateScoreSelected, setPlayerUpdateScore] = useState<PlayerUpdateScore>({
         turn: 1,
-        namePlayer: players[0].name,
-        score: 0
+        newScore: [],
+        indexUserSelected: 0
     });
-    const [visibleAddScore, setVisibleAddScore] = useState(false);
+    const [visibleAddScore, setVisibleAddScore] = useState<boolean>(false);
 
     useEffect(() => {
         setPage(0);
     }, [itemsPerPage]);
 
-    useEffect(() => {
-        let startedArrayScore = [];
-        players.map((player) => {
-            startedArrayScore.push(player.score)
-        })
-        setTotalScore(startedArrayScore)
-    }, [])
-
-    const addScore = () => {
-        const scoreToAd = [25, 2];
-        let tempTotalScore = [...totalScore];
+    const addScore = (scoreReceived: number[]) => {
+        // Add new score for turn concerned
+        // check if this turn already Exist
+        console.log("ADDD SCORE !!! :) --> ",scoreReceived)
+        if (playerUpdateScoreSelected.turn === arrayScore.length + 1){
+            //Is new turn so just add
+            setArrayScore([...arrayScore, scoreReceived])
+        } else {
+            // Update turn concerned !!
+            console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ A FAIRE UPDATE SCOrE !! :)")
+        }
+        console.log("AAARRRRAAAYY SCORE --> ", arrayScore);
+        /*let tempPlayersTotalScore = [...players];
         scoreToAd.map((value, index) => {
-            tempTotalScore[index] += value;
+            tempPlayersTotalScore[index] += value;
         })
-        setTotalScore(tempTotalScore);
-        setArrayScore([...arrayScore, {index: arrayScore.length + 1, score: scoreToAd}])
+        setTotalScore(tempPlayersTotalScore);*/
+        //setArrayScore([...arrayScore, {index: arrayScore.length + 1, score: scoreToAd}])
+
+        // Update total score !! :)
     }
 
-    const openAddScoreModal = (isNewTurn: boolean, turnSelected : number = 0, playerSelected : string = "", score: number = 0) => {
+    const openAddScoreModal = (isNewTurn: boolean, turnSelected : number = 1, indexPlayerSelected : number = 0) => {
         if (isNewTurn){
+            let arrayNewScore = [];
+            players.forEach(() => {
+                arrayNewScore.push(0);
+            })
             setPlayerUpdateScore({
-                turn: arrayScore.length ,
-                namePlayer: players[0].name,
-                score: 0
+                turn: arrayScore.length + 1,
+                newScore: arrayNewScore,
+                indexUserSelected: 0,
             })
         }else {
             setPlayerUpdateScore({
-                turn: turnSelected ,
-                namePlayer: playerSelected,
-                score: score
+                turn: turnSelected,
+                newScore: arrayScore[turnSelected - 1],
+                indexUserSelected: indexPlayerSelected,
             })
         }
         setVisibleAddScore(true);
@@ -88,12 +103,12 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
                         >
                             Total
                         </DataTable.Cell>
-                        {totalScore.map((num, indexBis) => (
+                        {players.map((player, indexBis) => (
                             <DataTable.Cell
                                 style={styles.dataTableWidthItem}
                                 key={`total-cell-${indexBis}`}
                             >
-                                {num}
+                                {player.score}
                             </DataTable.Cell>
                         ))}
                     </DataTable.Row>
@@ -103,13 +118,13 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
                         <DataTable.Cell
                             style={styles.dataTableWidthItem}
                         >
-                            {scoreUser.index}
+                            {index + 1}
                         </DataTable.Cell>
-                        {scoreUser.score.map((num, indexBis) => (
+                        {scoreUser.map((num, indexBis) => (
                             <DataTable.Cell
                                 style={styles.dataTableWidthItem}
                                 key={`score-cell-${indexBis}`}
-                                onPress={() => openAddScoreModal(false, scoreUser.index, players[indexBis].name, num )}
+                                onPress={() => openAddScoreModal(false, scoreUser.index, indexBis)}
                             >
                                 {num}
                             </DataTable.Cell>
@@ -135,6 +150,8 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
                 visible={visibleAddScore}
                 setVisible={setVisibleAddScore}
                 scoreInfo={playerUpdateScoreSelected}
+                setScoreInfo={setPlayerUpdateScore}
+                players={players}
             />
 
             <Button
