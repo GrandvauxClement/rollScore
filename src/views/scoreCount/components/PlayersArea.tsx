@@ -3,6 +3,10 @@ import Player from "../class/Player";
 import {Button, DataTable} from 'react-native-paper';
 import {styles} from "../../../generalStyle";
 import AddScoreModal from "./AddScoreModal";
+import {calculateTotalScorePlayers} from "../utils/scoreManipulationt";
+import {useSelector} from "react-redux";
+import {ReduxStore, store} from "../../../redux/store";
+import {initPlayers, setScoreForNewTurn} from "../../../redux/slices/playerScoreSlice";
 
 type PlayersAreaType = {
     players: Player[],
@@ -17,12 +21,14 @@ export type PlayerUpdateScore = {
 
 const optionsPerPage = [2, 3, 4];
 
-const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
-    console.log("Players !!! ", players);
+const PlayersArea = (): JSX.Element => {
+    const players = useSelector((state: ReduxStore) => state.playersScore).players
+
     const [page, setPage] = useState<number>(0);
     const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
-    const [arrayScore, setArrayScore] = useState<Array<any>>([])
-   // const [totalScore, setTotalScore] = useState<Array<any>>([])
+   // const [arrayScore, setArrayScore] = useState<number[][]>([])
+    const arrayScore = useSelector((state: ReduxStore) => state.playersScore).resumeScore
+    //const [totalScore, setTotalScore] = useState<number[]>([])
     const [playerUpdateScoreSelected, setPlayerUpdateScore] = useState<PlayerUpdateScore>({
         turn: 1,
         newScore: [],
@@ -40,7 +46,8 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
         console.log("ADDD SCORE !!! :) --> ",scoreReceived)
         if (playerUpdateScoreSelected.turn === arrayScore.length + 1){
             //Is new turn so just add
-            setArrayScore([...arrayScore, scoreReceived])
+            store.dispatch(setScoreForNewTurn(scoreReceived))
+          //  setArrayScore([...arrayScore, scoreReceived])
         } else {
             // Update turn concerned !!
             console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ A FAIRE UPDATE SCOrE !! :)")
@@ -54,6 +61,8 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
         //setArrayScore([...arrayScore, {index: arrayScore.length + 1, score: scoreToAd}])
 
         // Update total score !! :)
+       // setTotalScore(calculateTotalScorePlayers(arrayScore));
+
     }
 
     const openAddScoreModal = (isNewTurn: boolean, turnSelected : number = 1, indexPlayerSelected : number = 0) => {
@@ -124,7 +133,7 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
                             <DataTable.Cell
                                 style={styles.dataTableWidthItem}
                                 key={`score-cell-${indexBis}`}
-                                onPress={() => openAddScoreModal(false, scoreUser.index, indexBis)}
+                                onPress={() => openAddScoreModal(false, index, indexBis)}
                             >
                                 {num}
                             </DataTable.Cell>
@@ -156,11 +165,14 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
 
             <Button
                 onPress={() => openAddScoreModal(true)}
+                mode={"contained"}
             >
                 Ajouter Score
             </Button>
         </>
   )
 }
+
+
 
 export default PlayersArea

@@ -16,14 +16,27 @@ type AddScoreModalType = {
 
 const AddScoreModal = ({addScore, visible, setVisible, scoreInfo, players, setScoreInfo} : AddScoreModalType): JSX.Element => {
 
-    console.log("Score info --> ", scoreInfo);
+
     const [indexSelected, setIndexSelected] = React.useState(scoreInfo.indexUserSelected)
+    const [defaultScore, setDefaultScore] = React.useState(0);
 
     React.useEffect(() => {
         //Reset index when dialog was open
         console.log("*************************************** reopen dialog index user --> ", scoreInfo.indexUserSelected);
         setIndexSelected(scoreInfo.indexUserSelected)
     }, [visible])
+
+    React.useEffect(() => {
+        console.log("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€")
+        console.log("ON MODAL COMPONENT ************************************ indexSelected --> ", indexSelected);
+        console.log("Score select --> ", scoreInfo.newScore[indexSelected])
+        if (typeof scoreInfo.newScore[indexSelected] === "undefined"){
+            setDefaultScore(0)
+        } else {
+            setDefaultScore(scoreInfo.newScore[indexSelected])
+        }
+
+    }, [indexSelected]);
 
     // handle click set score of an user & go next
     const handleUpdateScoreInfo = (scoreReceived: number, isFinish: boolean = false) => {
@@ -50,6 +63,7 @@ const AddScoreModal = ({addScore, visible, setVisible, scoreInfo, players, setSc
     }
 
     const handleCloseDialog = () => {
+        console.log("00000000000000000 JE FERME passe là !!! :)")
         addScore(scoreInfo.newScore);
         setVisible(false);
     }
@@ -66,12 +80,11 @@ const AddScoreModal = ({addScore, visible, setVisible, scoreInfo, players, setSc
                     <Dialog.Content>
                         <Calculator
                             handleUpdateScoreInfo={handleUpdateScoreInfo}
-                           // handleClickDoneFinishTurn={handleClickDoneFinishTurn}
-                            defaultScore={scoreInfo.newScore[indexSelected]}
+                            defaultScore={defaultScore}
                         />
                     </Dialog.Content>
                     <Dialog.Actions>
-                        <Button onPress={() => setVisible(false)}>Fermer</Button>
+                        <Button onPress={handleCloseDialog}>Fermer</Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>

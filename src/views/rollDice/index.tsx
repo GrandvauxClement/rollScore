@@ -3,6 +3,7 @@ import type {PropsWithChildren} from 'react';
 import { ScrollView, Text, View} from "react-native";
 import {styles} from "../../generalStyle";
 import Dice from "./component/Dice";
+import DiceCustom from "./component/DiceCustom";
 
 
 const RollDice = (): JSX.Element => {
@@ -15,7 +16,7 @@ const RollDice = (): JSX.Element => {
                         Super TestDe mon app
                     </Text>
                 </View>
-                <Dice />
+                <DiceCustom />
             </ScrollView>
         /*</SafeAreaView>*/
     )

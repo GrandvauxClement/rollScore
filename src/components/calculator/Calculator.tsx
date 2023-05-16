@@ -23,7 +23,7 @@ const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, defaultSco
     React.useEffect(() => {
         // When user selected change default score too so reset score display by calculator
         setScore(defaultScore);
-        console.log("###################################### Use effect reset score !! :) ")
+        console.warn("--------------//////////////////////////////----###################################### Use effect reset score !! :) ", defaultScore)
     }, [defaultScore])
 
     const displayMethodInResume = (value: number | Operator) => {
@@ -264,13 +264,13 @@ const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, defaultSco
                 />
                 <OperatorButton
                     value={'OK'}
-                    handleClick={() => handleUpdateScoreInfo(score === null ? 0 : score, true)}
+                    handleClick={() => handleUpdateScoreInfo(score, true)}
                     specialWidth={false}
                     isOperator={false}
                 />
                 <OperatorButton
                     value={'Next'}
-                    handleClick={() => handleUpdateScoreInfo(score === null ? 0 : score, false)}
+                    handleClick={() => handleUpdateScoreInfo(score, false)}
                     specialWidth={false}
                     isOperator={true}
                 />

@@ -20,14 +20,9 @@ const ScoreCount = ({navigation, route}: ScoreCountProps): JSX.Element => {
         >
             {!init ?
                 <DialogStartGame
-                    players={players}
-                    setPlayers={setPlayers}
                     setInit={setInit}
                 /> :
-                <PlayersArea
-                    players={players}
-                    setPlayers={setPlayers}
-                />
+                <PlayersArea />
             }
 
         </View>
