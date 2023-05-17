@@ -6,7 +6,7 @@ import AddScoreModal from "./AddScoreModal";
 import {calculateTotalScorePlayers} from "../utils/scoreManipulationt";
 import {useSelector} from "react-redux";
 import {ReduxStore, store} from "../../../redux/store";
-import {initPlayers, setScoreForNewTurn} from "../../../redux/slices/playerScoreSlice";
+import {initPlayers, setScoreForNewTurn, updateScoreForSpecificTurn} from "../../../redux/slices/playerScoreSlice";
 
 type PlayersAreaType = {
     players: Player[],
@@ -26,9 +26,7 @@ const PlayersArea = (): JSX.Element => {
 
     const [page, setPage] = useState<number>(0);
     const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
-   // const [arrayScore, setArrayScore] = useState<number[][]>([])
     const arrayScore = useSelector((state: ReduxStore) => state.playersScore).resumeScore
-    //const [totalScore, setTotalScore] = useState<number[]>([])
     const [playerUpdateScoreSelected, setPlayerUpdateScore] = useState<PlayerUpdateScore>({
         turn: 1,
         newScore: [],
@@ -43,26 +41,13 @@ const PlayersArea = (): JSX.Element => {
     const addScore = (scoreReceived: number[]) => {
         // Add new score for turn concerned
         // check if this turn already Exist
-        console.log("ADDD SCORE !!! :) --> ",scoreReceived)
         if (playerUpdateScoreSelected.turn === arrayScore.length + 1){
             //Is new turn so just add
             store.dispatch(setScoreForNewTurn(scoreReceived))
-          //  setArrayScore([...arrayScore, scoreReceived])
         } else {
             // Update turn concerned !!
-            console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ A FAIRE UPDATE SCOrE !! :)")
+            store.dispatch(updateScoreForSpecificTurn({score: scoreReceived, turn: playerUpdateScoreSelected.turn}))
         }
-        console.log("AAARRRRAAAYY SCORE --> ", arrayScore);
-        /*let tempPlayersTotalScore = [...players];
-        scoreToAd.map((value, index) => {
-            tempPlayersTotalScore[index] += value;
-        })
-        setTotalScore(tempPlayersTotalScore);*/
-        //setArrayScore([...arrayScore, {index: arrayScore.length + 1, score: scoreToAd}])
-
-        // Update total score !! :)
-       // setTotalScore(calculateTotalScorePlayers(arrayScore));
-
     }
 
     const openAddScoreModal = (isNewTurn: boolean, turnSelected : number = 1, indexPlayerSelected : number = 0) => {
@@ -133,7 +118,7 @@ const PlayersArea = (): JSX.Element => {
                             <DataTable.Cell
                                 style={styles.dataTableWidthItem}
                                 key={`score-cell-${indexBis}`}
-                                onPress={() => openAddScoreModal(false, index, indexBis)}
+                                onPress={() => openAddScoreModal(false, index + 1, indexBis)}
                             >
                                 {num}
                             </DataTable.Cell>
@@ -160,7 +145,6 @@ const PlayersArea = (): JSX.Element => {
                 setVisible={setVisibleAddScore}
                 scoreInfo={playerUpdateScoreSelected}
                 setScoreInfo={setPlayerUpdateScore}
-                players={players}
             />
 
             <Button

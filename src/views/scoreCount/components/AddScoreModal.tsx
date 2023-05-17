@@ -1,9 +1,10 @@
 import React from "react";
-import {Appbar, Button, Dialog, List, Portal, TextInput} from "react-native-paper";
+import {Appbar, Button, Dialog, Portal} from "react-native-paper";
 import {StyleSheet} from "react-native";
 import Calculator from "../../../components/calculator/Calculator";
-import Player from "../class/Player";
 import {PlayerUpdateScore} from "./PlayersArea";
+import {useSelector} from "react-redux";
+import {ReduxStore} from "../../../redux/store";
 
 type AddScoreModalType = {
     addScore: any,
@@ -11,59 +12,46 @@ type AddScoreModalType = {
     setVisible: any,
     scoreInfo: PlayerUpdateScore,
     setScoreInfo: Function,
-    players: Player[]
 }
 
-const AddScoreModal = ({addScore, visible, setVisible, scoreInfo, players, setScoreInfo} : AddScoreModalType): JSX.Element => {
-
+const AddScoreModal = ({addScore, visible, setVisible, scoreInfo, setScoreInfo} : AddScoreModalType): JSX.Element => {
 
     const [indexSelected, setIndexSelected] = React.useState(scoreInfo.indexUserSelected)
     const [defaultScore, setDefaultScore] = React.useState(0);
+    const players = useSelector((state: ReduxStore) => state.playersScore).players
 
     React.useEffect(() => {
         //Reset index when dialog was open
-        console.log("*************************************** reopen dialog index user --> ", scoreInfo.indexUserSelected);
         setIndexSelected(scoreInfo.indexUserSelected)
-    }, [visible])
-
-    React.useEffect(() => {
-        console.log("€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€")
-        console.log("ON MODAL COMPONENT ************************************ indexSelected --> ", indexSelected);
-        console.log("Score select --> ", scoreInfo.newScore[indexSelected])
         if (typeof scoreInfo.newScore[indexSelected] === "undefined"){
             setDefaultScore(0)
         } else {
             setDefaultScore(scoreInfo.newScore[indexSelected])
         }
+    }, [visible])
 
-    }, [indexSelected]);
 
     // handle click set score of an user & go next
     const handleUpdateScoreInfo = (scoreReceived: number, isFinish: boolean = false) => {
-        console.log("================================================================ U¨PDATE SCORE index selected --> ", indexSelected)
         let tempScore = [...scoreInfo.newScore];
         tempScore[indexSelected] = scoreReceived;
-        console.log(" temp score new value --> ", tempScore)
         setScoreInfo({
             ...scoreInfo,
             newScore: tempScore
         })
         //Check if his last user and on this case close modal & update score on datatable
-        console.log("================================================================")
-        console.log("On update score actualscore info ---> ", scoreInfo)
         if (indexSelected === players.length - 1 || isFinish){
 
             addScore(tempScore);
             setVisible(false);
         }else {
             // Else spend to next user
-            console.log("Next user FIND SO GO NEXT !!! :)")
             setIndexSelected(indexSelected + 1);
+            setDefaultScore(scoreInfo.newScore[indexSelected + 1])
         }
     }
 
     const handleCloseDialog = () => {
-        console.log("00000000000000000 JE FERME passe là !!! :)")
         addScore(scoreInfo.newScore);
         setVisible(false);
     }
@@ -80,7 +68,8 @@ const AddScoreModal = ({addScore, visible, setVisible, scoreInfo, players, setSc
                     <Dialog.Content>
                         <Calculator
                             handleUpdateScoreInfo={handleUpdateScoreInfo}
-                            defaultScore={defaultScore}
+                            score={defaultScore}
+                            setScore={setDefaultScore}
                         />
                     </Dialog.Content>
                     <Dialog.Actions>

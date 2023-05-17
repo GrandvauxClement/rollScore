@@ -2,29 +2,23 @@ import * as React from "react";
 import {View} from "react-native";
 import OperatorButton from "./OperatorButton";
 import {Text} from "react-native-paper";
+import {calculateTotalScoreByHisHistory} from "../../views/scoreCount/utils/scoreManipulationt";
 
 type Operator = 'addition'|'subtraction'|'multiplication'| 'division';
 type CalculatorType = {
     handleUpdateScoreInfo: Function,
-    defaultScore: number
+    score: number,
+    setScore: Function,
 }
 
-const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, defaultScore}): JSX.Element => {
+const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, score, setScore}): JSX.Element => {
 
-    const [score, setScore] = React.useState<number>(defaultScore);
-    const [operation, setOperation] = React.useState<Operator>(null);
     const [numberEnter, setNumberEnter] = React.useState<number>(0);
     const [historyCalcul, setHistoryCalcul] = React.useState<any[]>([0]);
 
     const concatenateTwoNumber = (number1: number, number2: number) => {
         return parseInt(number1.toString() + number2.toString());
     }
-
-    React.useEffect(() => {
-        // When user selected change default score too so reset score display by calculator
-        setScore(defaultScore);
-        console.warn("--------------//////////////////////////////----###################################### Use effect reset score !! :) ", defaultScore)
-    }, [defaultScore])
 
     const displayMethodInResume = (value: number | Operator) => {
         if (typeof value === 'number'){
@@ -60,6 +54,8 @@ const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, defaultSco
                 tempHistory[tempHistory.length- 1] = value;
             }
         }
+        const calculateNewScore = calculateTotalScoreByHisHistory(tempHistory);
+        setScore(calculateNewScore);
         setHistoryCalcul(tempHistory);
     }
     // Method to update score,
@@ -77,23 +73,12 @@ const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, defaultSco
             setNumberEnter(tempNumberEnter)
 
             updateHistoryCalcul(false, tempNumberEnter, true)
-            if(operation === null){
-                setScore(concatenateTwoNumber(score, value))
-            } else if (operation === 'addition'){
-                setScore(score + tempNumberEnter)
-            } else if (operation === 'subtraction'){
-                setScore(score - tempNumberEnter)
-            } else if (operation === 'multiplication'){
-                setScore(score * tempNumberEnter)
-            } else if (operation === 'division'){
-                setScore(score / tempNumberEnter)
-            }
         }
     }
 
     // method to handle operation selected
-    const handleClickOperation = (kind: 'addition'|'subtraction'|'multiplication'| 'division') => {
-      setOperation(kind);
+    const handleClickOperation = (kind: Operator) => {
+
       updateHistoryCalcul(true, kind, true)
       // set number stock to default (0)
       setNumberEnter(0)
@@ -101,9 +86,17 @@ const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, defaultSco
 
     const handleResetScore = () => {
         setScore(0)
+        setHistoryCalcul([0])
+        setNumberEnter(0);
     };
 
-    const handleRemoveLastOperation = () => {
+    const handleClickOkOrDone = (isFinish: boolean) => {
+      setNumberEnter(0);
+      setHistoryCalcul([0])
+      handleUpdateScoreInfo(score, isFinish)
+    }
+
+    const handleRemoveLastEnter = () => {
         // Method to cancel last operation
     }
 
@@ -264,13 +257,13 @@ const Calculator: React.FC<CalculatorType> = ({handleUpdateScoreInfo, defaultSco
                 />
                 <OperatorButton
                     value={'OK'}
-                    handleClick={() => handleUpdateScoreInfo(score, true)}
+                    handleClick={() => handleClickOkOrDone(true)}
                     specialWidth={false}
                     isOperator={false}
                 />
                 <OperatorButton
                     value={'Next'}
-                    handleClick={() => handleUpdateScoreInfo(score, false)}
+                    handleClick={() => handleClickOkOrDone(false)}
                     specialWidth={false}
                     isOperator={true}
                 />

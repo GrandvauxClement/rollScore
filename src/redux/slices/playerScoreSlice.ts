@@ -24,25 +24,36 @@ const playerScoreSlice = createSlice({
       },
       setScoreForNewTurn : (state, action) => {
           const tempResumeScore = state.resumeScore.concat([action.payload]);
-         // tempResumeScore.push(action.payload);
-          console.log("èèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèèè REDUXXXX setscore value recevied --> ", action.payload);
-          console.log("tempTotal score --> ", tempResumeScore);
           const tempPlayer = state.players
-         /* const playersUpdate: Player[] = calculateTotalScorePlayers(tempResumeScore, tempPlayer)
-
-          console.log("PlayersUpdate --> ", playersUpdate)*/
             return {
                 ...state,
                 players: calculateTotalScorePlayers(tempResumeScore, tempPlayer),
                 resumeScore: tempResumeScore
             }
-      }
+      },
+        updateScoreForSpecificTurn : (state, action) => {
+
+            const tempUpdateScore = state.resumeScore.map((scoreTurn, index) => {
+                if (index === action.payload.turn - 1){
+                    return action.payload.score
+                } else {
+                    return scoreTurn
+                }
+            })
+
+            return {
+                ...state,
+                players: calculateTotalScorePlayers(tempUpdateScore, state.players),
+                resumeScore: tempUpdateScore
+            }
+        }
     }
 })
 
 export const {
     initPlayers,
-    setScoreForNewTurn
+    setScoreForNewTurn,
+    updateScoreForSpecificTurn
 } = playerScoreSlice.actions;
 
 
