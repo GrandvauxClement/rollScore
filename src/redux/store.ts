@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import playerScoreSlice, {PlayerScoreType} from "./slices/playerScoreSlice";
 
-
+import playerScoreSlice, { PlayerScoreType } from './slices/playerScoreSlice';
 
 export type ReduxStore = {
     playersScore: PlayerScoreType;

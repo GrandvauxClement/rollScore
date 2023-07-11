@@ -1,80 +1,80 @@
-import React, {useState} from "react";
-import {Button, Dialog, Portal, Text, TextInput, List} from "react-native-paper";
-import Player from "../class/Player";
-import {ScrollView} from "react-native";
-import {useSelector} from "react-redux";
-import {ReduxStore, store} from "../../../redux/store";
-import {initPlayers} from "../../../redux/slices/playerScoreSlice";
+import React, { ReactElement, useState } from 'react';
+import { ScrollView } from 'react-native';
+import { Button, Dialog, Portal, TextInput, List } from 'react-native-paper';
+
+import { initPlayers } from '../../../redux/slices/playerScoreSlice';
+import { store } from '../../../redux/store';
+import Player from '../class/Player';
 
 type DialogSTartGameType = {
-    setInit: any
-}
+    setInit: any;
+};
 
-const DialogStartGame = ({ setInit}: DialogSTartGameType): JSX.Element => {
-
+const DialogStartGame = ({ setInit }: DialogSTartGameType): ReactElement => {
     const [visible, setVisible] = useState(false);
     const [players, setPlayers] = useState<Player[]>([]);
-   // const players = useSelector((state: ReduxStore) => state.playersScore).players
     const showDialog = () => setVisible(true);
     const hideDialog = () => setVisible(false);
-    const [text, setText] = useState("");
-
+    const [text, setText] = useState('');
+    const handleEnterUserName = (name: string) => {
+        setText(name);
+    };
     const addNewPlayer = () => {
-      if (text !== ""){
-          setPlayers([...players, {name: text, score: 0}])
-          setText("")
-      }
-    }
+        if (text !== '') {
+            setPlayers([...players, { name: text, score: 0 }]);
 
-    const beginGame = () => {
-        store.dispatch(initPlayers(players))
-        setInit(true)
-        hideDialog()
-    }
-
-    const removeUser = (index: number) => {
-        if (players.length === 1){
-            setPlayers([])
-        } else {
-            setPlayers(players.splice(index,1))
+            setText('');
         }
-    }
+    };
+    const beginGame = () => {
+        store.dispatch(initPlayers(players));
+        setInit(true);
+        hideDialog();
+    };
+
+    const removeUser = (indexReceived: number) => {
+        if (players.length === 1) {
+            setPlayers([]);
+        } else {
+            setPlayers(players.filter((item, index) => index !== indexReceived));
+        }
+    };
 
     return (
         <>
-            <Button
-                onPress={showDialog}
-            >
-                Commencer une nouvelle partie
-            </Button>
+            <Button onPress={showDialog}>Commencer une nouvelle partie</Button>
             <Portal>
                 <Dialog visible={visible} onDismiss={hideDialog}>
                     <Dialog.Title>Ajouter les joueurs</Dialog.Title>
                     <Dialog.Content>
                         <TextInput
-                            label={"Nom du joueur"}
+                            label={'Nom du joueur'}
                             value={text}
-                            onChangeText={text => setText(text)}
+                            onChangeText={text => handleEnterUserName(text)}
                         />
-                        <Button
-                            onPress={addNewPlayer}
-                        >
-                            Ajouter
-                        </Button>
-                        <ScrollView style={{height: 200}}>
-                            {players.length > 0 &&
+                        <Button onPress={addNewPlayer}>Ajouter</Button>
+                        <ScrollView style={{ height: 200 }}>
+                            {players.length > 0 && (
                                 <List.Section>
-                                    <List.Subheader>Joueur Inscrit</List.Subheader>
+                                    <List.Subheader>
+                                        Joueur Inscrit
+                                    </List.Subheader>
                                     {players.map((player, index) => (
                                         <List.Item
                                             onPress={() => removeUser(index)}
                                             key={index}
-                                            title={`${index + 1} - ${player.name}`}
-                                            right={() => <List.Icon icon={"delete-forever"} />}
+                                            title={`${index + 1} - ${
+                                                player.name
+                                            }`}
+                                            right={() => (
+                                                <List.Icon
+                                                    icon={'delete-forever'}
+                                                />
+                                            )}
                                         />
                                     ))}
                                 </List.Section>
-                            }
+                            )}
                         </ScrollView>
                     </Dialog.Content>
                     <Dialog.Actions>
@@ -84,7 +84,6 @@ const DialogStartGame = ({ setInit}: DialogSTartGameType): JSX.Element => {
                 </Dialog>
             </Portal>
         </>
-    )
-}
-
-export default DialogStartGame
+    );
+};
+export default DialogStartGame;

@@ -1,6 +1,6 @@
-class Player {
+interface Player {
     name: string;
     score: number;
 }
 
-export default Player
+export default Player;

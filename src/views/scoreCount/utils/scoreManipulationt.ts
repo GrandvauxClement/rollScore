@@ -1,66 +1,67 @@
-import Player from "../class/Player";
+import Player from '../class/Player';
 
-export const calculateTotalScorePlayers = (allScore: number[][], players: Player[]): Player[] => {
-    console.log("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}} on methode utils allScore received --> ", allScore);
-    console.log("Players received --> ", players)
-
-  let stockTotal: number[] = [];
-  allScore.forEach((scoreTurn, index) => {
-      console.log("Boucle for scor turn --> ", index)
-      scoreTurn.forEach((score, indexBis) => {
-          if (index === 0){
-              stockTotal[indexBis] = score
-          } else {
-              stockTotal[indexBis] += score;
-          }
-      })
-  })
-    console.log("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}} on methode utils stock total calcul --> ", stockTotal);
+export const calculateTotalScorePlayers = (
+    allScore: number[][],
+    players: Player[],
+): Player[] => {
+    const stockTotal: number[] = [];
+    allScore.forEach((scoreTurn, index) => {
+        scoreTurn.forEach((score, indexBis) => {
+            if (index === 0) {
+                stockTotal[indexBis] = score;
+            } else {
+                stockTotal[indexBis] += score;
+            }
+        });
+    });
     // Total score are calculte
     const updatedPlayers = players.map((player, index) => {
-        const updatedPlayer = {...player};
+        const updatedPlayer = { ...player };
         updatedPlayer.score = stockTotal[index];
-        return updatedPlayer
-    })
+        return updatedPlayer;
+    });
 
-    return updatedPlayers
-}
+    return updatedPlayers;
+};
 
-export const calculateTotalScoreByHisHistory = (historyScore : any[]): number => {
-    let total : number = 0 ;
-    let calculFinish : boolean = false;
+export const calculateTotalScoreByHisHistory = (
+    historyScore: any[],
+): number => {
+    let total: number = 0;
+    let calculFinish: boolean = false;
     let index = 0;
-    while (!calculFinish){
-        if (index === 0 ){
+    while (!calculFinish) {
+        if (index === 0) {
             total = historyScore[index];
-            if (historyScore.length <= 2){
+            if (historyScore.length <= 2) {
                 calculFinish = true;
-            }else {
-                index ++
+            } else {
+                index++;
             }
         } else {
-            if (typeof historyScore[index] === 'string' && typeof historyScore[index + 1] === 'number'){
-                if (historyScore[index] === 'subtraction'){
+            if (
+                typeof historyScore[index] === 'string' &&
+                typeof historyScore[index + 1] === 'number'
+            ) {
+                if (historyScore[index] === 'subtraction') {
                     total -= historyScore[index + 1];
-                } else if (historyScore[index]  === 'addition') {
+                } else if (historyScore[index] === 'addition') {
                     total += historyScore[index + 1];
-                } else if (historyScore[index]  === 'multiplication') {
+                } else if (historyScore[index] === 'multiplication') {
                     total = total * historyScore[index + 1];
-                } else if (historyScore[index]  === 'division') {
+                } else if (historyScore[index] === 'division') {
                     total = total / historyScore[index];
                 }
 
-                if (historyScore.length <= index + 2){
+                if (historyScore.length <= index + 2) {
                     calculFinish = true;
-                }else {
-                    index +=2
+                } else {
+                    index += 2;
                 }
-
             } else {
                 calculFinish = true;
             }
         }
     }
-
     return total;
-}
+};

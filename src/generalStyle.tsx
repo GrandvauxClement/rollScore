@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     sectionContainer: {
@@ -23,8 +23,8 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    dataTableWidthItem:{
+    dataTableWidthItem: {
         width: 300,
-        color: "red"
-    }
+        color: 'red',
+    },
 });

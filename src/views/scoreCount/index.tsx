@@ -1,32 +1,17 @@
-import { View} from "react-native";
-import {styles} from "../../generalStyle";
-import {useState} from "react";
-import DialogStartGame from "./components/DialogStartGame";
-import PlayersArea from "./components/PlayersArea";
+import { ReactElement, useState } from 'react';
+import { View } from 'react-native';
 
-type ScoreCountProps = {
-    navigation: any,
-    route: any
-}
-const ScoreCount = ({navigation, route}: ScoreCountProps): JSX.Element => {
+import DialogStartGame from './components/DialogStartGame';
+import PlayersArea from './components/PlayersArea';
+import { styles } from '../../generalStyle';
 
+const ScoreCount = (): ReactElement => {
     const [init, setInit] = useState(false);
-    const [players, setPlayers] = useState([]);
-
 
     return (
-        <View
-            style={styles.container}
-        >
-            {!init ?
-                <DialogStartGame
-                    setInit={setInit}
-                /> :
-                <PlayersArea />
-            }
-
+        <View style={styles.container}>
+            {!init ? <DialogStartGame setInit={setInit} /> : <PlayersArea />}
         </View>
-    )
-}
-
-export default ScoreCount
+    );
+};
+export default ScoreCount;
