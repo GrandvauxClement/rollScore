@@ -1,116 +1,132 @@
-import React, {useEffect, useState} from "react";
-import Player from "../class/Player";
-import {Button, DataTable} from 'react-native-paper';
-import {styles} from "../../../generalStyle";
-import AddScoreModal from "./AddScoreModal";
+import React, { ReactElement, useEffect, useState } from 'react';
+import { Button, DataTable } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 
-type PlayersAreaType = {
-    players: Array<Player>
-}
+import AddScoreModal from './AddScoreModal';
+import { styles } from '../../../generalStyle';
+import {
+    setScoreForNewTurn,
+    updateScoreForSpecificTurn,
+} from '../../../redux/slices/playerScoreSlice';
+import { ReduxStore, store } from '../../../redux/store';
+
+export type PlayerUpdateScore = {
+    turn: number;
+    newScore: number[];
+    indexUserSelected: number;
+};
 
 const optionsPerPage = [2, 3, 4];
 
-const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
+const PlayersArea = (): ReactElement => {
+    const players = useSelector(
+        (state: ReduxStore) => state.playersScore,
+    ).players;
 
     const [page, setPage] = useState<number>(0);
     const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
-    const [arrayScore, setArrayScore] = useState<Array<any>>([])
-    const [totalScore, setTotalScore] = useState<Array<any>>([])
-    const [playerUpdateScoreSelected, setPlayerUpdateScore] = useState({
-        turn: 1,
-        namePlayer: players[0].name,
-        score: 0
-    });
-    const [visibleAddScore, setVisibleAddScore] = useState(false);
+    const arrayScore = useSelector(
+        (state: ReduxStore) => state.playersScore,
+    ).resumeScore;
+    const [playerUpdateScoreSelected, setPlayerUpdateScore] =
+        useState<PlayerUpdateScore>({
+            turn: 1,
+            newScore: [],
+            indexUserSelected: 0,
+        });
+    const [visibleAddScore, setVisibleAddScore] = useState<boolean>(false);
 
     useEffect(() => {
         setPage(0);
     }, [itemsPerPage]);
 
-    useEffect(() => {
-        let startedArrayScore = [];
-        players.map((player) => {
-            startedArrayScore.push(player.score)
-        })
-        setTotalScore(startedArrayScore)
-    }, [])
+    const addScore = (scoreReceived: number[]) => {
+        // Add new score for turn concerned
+        // check if this turn already Exist
+        if (playerUpdateScoreSelected.turn === arrayScore.length + 1) {
+            //Is new turn so just add
+            store.dispatch(setScoreForNewTurn(scoreReceived));
+        } else {
+            // Update turn concerned !!
+            store.dispatch(
+                updateScoreForSpecificTurn({
+                    score: scoreReceived,
+                    turn: playerUpdateScoreSelected.turn,
+                }),
+            );
+        }
+    };
 
-    const addScore = () => {
-        const scoreToAd = [25, 2];
-        let tempTotalScore = [...totalScore];
-        scoreToAd.map((value, index) => {
-            tempTotalScore[index] += value;
-        })
-        setTotalScore(tempTotalScore);
-        setArrayScore([...arrayScore, {index: arrayScore.length + 1, score: scoreToAd}])
-    }
-
-    const openAddScoreModal = (isNewTurn: boolean, turnSelected : number = 0, playerSelected : string = "", score: number = 0) => {
-        if (isNewTurn){
+    const openAddScoreModal = (
+        isNewTurn: boolean,
+        turnSelected: number = 1,
+        indexPlayerSelected: number = 0,
+    ) => {
+        if (isNewTurn) {
+            const arrayNewScore: number[] = [];
+            players.forEach(() => {
+                arrayNewScore.push(0);
+            });
             setPlayerUpdateScore({
-                turn: arrayScore.length ,
-                namePlayer: players[0].name,
-                score: 0
-            })
-        }else {
+                turn: arrayScore.length + 1,
+                newScore: arrayNewScore,
+                indexUserSelected: 0,
+            });
+        } else {
             setPlayerUpdateScore({
-                turn: turnSelected ,
-                namePlayer: playerSelected,
-                score: score
-            })
+                turn: turnSelected,
+                newScore: arrayScore[turnSelected - 1],
+                indexUserSelected: indexPlayerSelected,
+            });
         }
         setVisibleAddScore(true);
-    }
+    };
 
-    // @ts-ignore
     return (
         <>
             <DataTable>
                 <DataTable.Header>
-                    <DataTable.Title
-                        style={styles.dataTableWidthItem}
-                    >
+                    <DataTable.Title style={styles.dataTableWidthItem}>
                         Tour
                     </DataTable.Title>
                     {players.map((player, index) => (
                         <DataTable.Title
                             key={index}
-                            style={styles.dataTableWidthItem}
-                        >
+                            style={styles.dataTableWidthItem}>
                             {player.name}
                         </DataTable.Title>
                     ))}
                 </DataTable.Header>
 
-                    <DataTable.Row >
+                <DataTable.Row>
+                    <DataTable.Cell style={styles.dataTableWidthItem}>
+                        Total
+                    </DataTable.Cell>
+                    {players.map((player, indexBis) => (
                         <DataTable.Cell
                             style={styles.dataTableWidthItem}
-                        >
-                            Total
+                            key={`total-cell-${indexBis}`}>
+                            {player.score}
                         </DataTable.Cell>
-                        {totalScore.map((num, indexBis) => (
-                            <DataTable.Cell
-                                style={styles.dataTableWidthItem}
-                                key={`total-cell-${indexBis}`}
-                            >
-                                {num}
-                            </DataTable.Cell>
-                        ))}
-                    </DataTable.Row>
+                    ))}
+                </DataTable.Row>
 
                 {arrayScore.map((scoreUser, index) => (
                     <DataTable.Row key={`score-row-${index}`}>
-                        <DataTable.Cell
-                            style={styles.dataTableWidthItem}
-                        >
-                            {scoreUser.index}
+                        <DataTable.Cell style={styles.dataTableWidthItem}>
+                            {index + 1}
                         </DataTable.Cell>
-                        {scoreUser.score.map((num, indexBis) => (
+                        {scoreUser.map((num, indexBis) => (
                             <DataTable.Cell
                                 style={styles.dataTableWidthItem}
                                 key={`score-cell-${indexBis}`}
-                                onPress={() => openAddScoreModal(false, scoreUser.index, players[indexBis].name, num )}
-                            >
+                                onPress={() =>
+                                    openAddScoreModal(
+                                        false,
+                                        index + 1,
+                                        indexBis,
+                                    )
+                                }>
                                 {num}
                             </DataTable.Cell>
                         ))}
@@ -120,7 +136,7 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
                 <DataTable.Pagination
                     page={page}
                     numberOfPages={3}
-                    onPageChange={(page) => setPage(page)}
+                    onPageChange={page => setPage(page)}
                     label="1-2 of 6"
                     //@ts-ignore
                     optionsPerPage={optionsPerPage}
@@ -135,15 +151,13 @@ const PlayersArea = ({players}: PlayersAreaType): JSX.Element => {
                 visible={visibleAddScore}
                 setVisible={setVisibleAddScore}
                 scoreInfo={playerUpdateScoreSelected}
+                setScoreInfo={setPlayerUpdateScore}
             />
 
-            <Button
-                onPress={() => openAddScoreModal(true)}
-            >
+            <Button onPress={() => openAddScoreModal(true)} mode={'contained'}>
                 Ajouter Score
             </Button>
         </>
-  )
-}
-
-export default PlayersArea
+    );
+};
+export default PlayersArea;

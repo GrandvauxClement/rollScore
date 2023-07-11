@@ -1,25 +1,15 @@
-import React from "react";
-import type {PropsWithChildren} from 'react';
-import { ScrollView, Text, View} from "react-native";
-import {styles} from "../../generalStyle";
-import Dice from "./component/Dice";
+import React, { ReactElement } from 'react';
+import { ScrollView } from 'react-native';
 
+import DiceCustom from './component/DiceCustom';
 
-const RollDice = (): JSX.Element => {
-
+const RollDice = (): ReactElement => {
     return (
-        /*<SafeAreaView>*/
-            <ScrollView>
-                <View>
-                    <Text style={styles.sectionTitle}>
-                        Super TestDe mon app
-                    </Text>
-                </View>
-                <Dice />
-            </ScrollView>
-        /*</SafeAreaView>*/
-    )
+        <ScrollView
+            contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+            <DiceCustom />
+        </ScrollView>
+    );
+};
 
-}
-
-export default RollDice
+export default RollDice;
