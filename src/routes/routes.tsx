@@ -17,7 +17,7 @@ const Routes = () => {
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
 
-                        if (route.name === 'Score Count') {
+                        if (route.name === 'Tableau de score') {
                             iconName = focused
                                 ? 'ios-list'
                                 : 'ios-list-outline';
@@ -28,7 +28,7 @@ const Routes = () => {
                                     color={color}
                                 />
                             );
-                        } else if (route.name === 'Roll Dice') {
+                        } else if (route.name === 'Lancer de dé') {
                             iconName = focused
                                 ? 'dice-multiple'
                                 : 'dice-multiple-outline';
@@ -45,8 +45,8 @@ const Routes = () => {
                     tabBarActiveTintColor: 'rgba(103, 80, 164, 1)',
                     tabBarInactiveTintColor: 'gray',
                 })}>
-                <Tab.Screen name="Score Count" component={ScoreCount} />
-                <Tab.Screen name="Roll Dice" component={RollDice} />
+                <Tab.Screen name="Tableau de score" component={ScoreCount} />
+                <Tab.Screen name="Lancer de dé" component={RollDice} />
             </Tab.Navigator>
         </NavigationContainer>
     );

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, {ReactElement, useEffect, useRef, useState} from 'react';
 import { Button, DataTable } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
@@ -9,6 +9,8 @@ import {
     updateScoreForSpecificTurn,
 } from '../../../redux/slices/playerScoreSlice';
 import { ReduxStore, store } from '../../../redux/store';
+import {ScrollView, View} from "react-native";
+import RebootGameModal from "./RebootGameModal";
 
 export type PlayerUpdateScore = {
     turn: number;
@@ -16,15 +18,17 @@ export type PlayerUpdateScore = {
     indexUserSelected: number;
 };
 
-const optionsPerPage = [2, 3, 4];
+type PlayerAreaType = {
+    setInitGame : any
+}
 
-const PlayersArea = (): ReactElement => {
+
+const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
     const players = useSelector(
         (state: ReduxStore) => state.playersScore,
     ).players;
 
-    const [page, setPage] = useState<number>(0);
-    const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
+    const scrollViewRef = useRef(null);
     const arrayScore = useSelector(
         (state: ReduxStore) => state.playersScore,
     ).resumeScore;
@@ -35,10 +39,7 @@ const PlayersArea = (): ReactElement => {
             indexUserSelected: 0,
         });
     const [visibleAddScore, setVisibleAddScore] = useState<boolean>(false);
-
-    useEffect(() => {
-        setPage(0);
-    }, [itemsPerPage]);
+    const [visibleRebootGame, setVisibleRebootGame] = useState<boolean>(false);
 
     const addScore = (scoreReceived: number[]) => {
         // Add new score for turn concerned
@@ -55,6 +56,7 @@ const PlayersArea = (): ReactElement => {
                 }),
             );
         }
+        scrollViewRef.current.scrollToEnd({animated: true})
     };
 
     const openAddScoreModal = (
@@ -84,6 +86,22 @@ const PlayersArea = (): ReactElement => {
 
     return (
         <>
+            <View style={{flexDirection: "row"}}>
+                <Button
+                    onPress={() => openAddScoreModal(true)}
+                    mode={'contained'}
+                    style={{margin: 5}}
+                >
+                    Ajouter joueur
+                </Button>
+                <Button
+                    onPress={() => setVisibleRebootGame(true)}
+                    mode={'contained'}
+                    style={{margin: 5}}
+                >
+                    Recommencer une partie
+                </Button>
+            </View>
             <DataTable>
                 <DataTable.Header>
                     <DataTable.Title style={styles.dataTableWidthItem}>
@@ -110,41 +128,30 @@ const PlayersArea = (): ReactElement => {
                         </DataTable.Cell>
                     ))}
                 </DataTable.Row>
-
-                {arrayScore.map((scoreUser, index) => (
-                    <DataTable.Row key={`score-row-${index}`}>
-                        <DataTable.Cell style={styles.dataTableWidthItem}>
-                            {index + 1}
-                        </DataTable.Cell>
-                        {scoreUser.map((num, indexBis) => (
-                            <DataTable.Cell
-                                style={styles.dataTableWidthItem}
-                                key={`score-cell-${indexBis}`}
-                                onPress={() =>
-                                    openAddScoreModal(
-                                        false,
-                                        index + 1,
-                                        indexBis,
-                                    )
-                                }>
-                                {num}
+                <ScrollView ref={scrollViewRef} style={{height: "60%"}}>
+                    {arrayScore.map((scoreUser, index) => (
+                        <DataTable.Row key={`score-row-${index}`}>
+                            <DataTable.Cell style={styles.dataTableWidthItem}>
+                                {index + 1}
                             </DataTable.Cell>
-                        ))}
-                    </DataTable.Row>
-                ))}
+                            {scoreUser.map((num, indexBis) => (
+                                <DataTable.Cell
+                                    style={styles.dataTableWidthItem}
+                                    key={`score-cell-${indexBis}`}
+                                    onPress={() =>
+                                        openAddScoreModal(
+                                            false,
+                                            index + 1,
+                                            indexBis,
+                                        )
+                                    }>
+                                    {num}
+                                </DataTable.Cell>
+                            ))}
+                        </DataTable.Row>
+                    ))}
+                </ScrollView>
 
-                <DataTable.Pagination
-                    page={page}
-                    numberOfPages={3}
-                    onPageChange={page => setPage(page)}
-                    label="1-2 of 6"
-                    //@ts-ignore
-                    optionsPerPage={optionsPerPage}
-                    itemsPerPage={itemsPerPage}
-                    setItemsPerPage={setItemsPerPage}
-                    showFastPagination
-                    optionsLabel={'Rows per page'}
-                />
             </DataTable>
             <AddScoreModal
                 addScore={addScore}
@@ -154,7 +161,13 @@ const PlayersArea = (): ReactElement => {
                 setScoreInfo={setPlayerUpdateScore}
             />
 
-            <Button onPress={() => openAddScoreModal(true)} mode={'contained'}>
+            <RebootGameModal setInitGame={setInitGame} visible={visibleRebootGame} setVisible={setVisibleRebootGame} />
+
+            <Button
+                onPress={() => openAddScoreModal(true)}
+                mode={'contained'}
+                style={{marginTop: 10}}
+            >
                 Ajouter Score
             </Button>
         </>

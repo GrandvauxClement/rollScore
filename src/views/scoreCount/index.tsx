@@ -10,7 +10,7 @@ const ScoreCount = (): ReactElement => {
 
     return (
         <View style={styles.container}>
-            {!init ? <DialogStartGame setInit={setInit} /> : <PlayersArea />}
+            {!init ? <DialogStartGame setInit={setInit} /> : <PlayersArea setInitGame={setInit}/>}
         </View>
     );
 };

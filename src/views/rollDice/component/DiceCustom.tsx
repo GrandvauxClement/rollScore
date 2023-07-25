@@ -79,7 +79,7 @@ export default class DiceCustom extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.diceText}>
-                    You Rolled a {this.state.randomNumber}
+                    Valeur du dé : {this.state.randomNumber}
                 </Text>
                 <Image
                     style={{ width: 300, height: 300 }}
@@ -89,7 +89,7 @@ export default class DiceCustom extends React.Component {
                     <Button
                         mode={'contained'}
                         style={{ justifyContent: 'center' }}>
-                        Roll Dice
+                        Relancer le dé
                     </Button>
                 </TouchableOpacity>
             </View>

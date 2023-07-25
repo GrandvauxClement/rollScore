@@ -55,10 +55,31 @@ const playerScoreSlice = createSlice({
                 resumeScore: tempUpdateScore,
             };
         },
+        rebootGameWithoutPlayer : (state) => {
+            return {
+                ...initialState
+            }
+        },
+        rebootGameWithPlayer : (state) => {
+
+            let resetPlayer = state.players.map(player => ({
+                ...player,
+                score : 0
+            }));
+            return {
+                players : resetPlayer,
+                resumeScore : []
+            }
+        }
     },
 });
 
-export const { initPlayers, setScoreForNewTurn, updateScoreForSpecificTurn } =
-    playerScoreSlice.actions;
+export const {
+    initPlayers,
+    setScoreForNewTurn,
+    updateScoreForSpecificTurn,
+    rebootGameWithoutPlayer,
+    rebootGameWithPlayer
+} = playerScoreSlice.actions;
 
 export default playerScoreSlice.reducer;

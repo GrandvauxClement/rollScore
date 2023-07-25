@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
-    "version": "1.0.0",
+    "name": "tooly game",
+    "slug": "tooly-game",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/3.png",
     "userInterfaceStyle": "light",
@@ -22,12 +22,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/1.png",
+        "foregroundImage": "./assets/3.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.cgrandvauxdev.myapp"
     },
     "web": {
       "favicon": "./assets/3.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "005a1faf-e8ab-4d43-b1d8-97c327047bb2"
+      }
     }
   }
 }
