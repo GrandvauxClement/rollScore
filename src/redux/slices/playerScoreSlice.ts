@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 import Player from '../../views/scoreCount/class/Player';
-import { calculateTotalScorePlayers } from '../../views/scoreCount/utils/scoreManipulationt';
+import {addNewPlayer, calculateTotalScorePlayers} from '../../views/scoreCount/utils/scoreManipulationt';
 
 export type PlayerScoreType = {
     players: Player[];
@@ -55,7 +55,7 @@ const playerScoreSlice = createSlice({
                 resumeScore: tempUpdateScore,
             };
         },
-        rebootGameWithoutPlayer : (state) => {
+        rebootGameWithoutPlayer : () => {
             return {
                 ...initialState
             }
@@ -70,7 +70,11 @@ const playerScoreSlice = createSlice({
                 players : resetPlayer,
                 resumeScore : []
             }
+        },
+        addNewPlayerRedux: (state, action) => {
+            return addNewPlayer(action.payload.name, [...state.players], [...state.resumeScore]) ;
         }
+
     },
 });
 
@@ -79,7 +83,8 @@ export const {
     setScoreForNewTurn,
     updateScoreForSpecificTurn,
     rebootGameWithoutPlayer,
-    rebootGameWithPlayer
+    rebootGameWithPlayer,
+    addNewPlayerRedux
 } = playerScoreSlice.actions;
 
 export default playerScoreSlice.reducer;

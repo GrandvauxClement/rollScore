@@ -1,4 +1,4 @@
-import React, {ReactElement, useEffect, useRef, useState} from 'react';
+import React, {ReactElement, useRef, useState} from 'react';
 import { Button, DataTable } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
@@ -11,6 +11,7 @@ import {
 import { ReduxStore, store } from '../../../redux/store';
 import {ScrollView, View} from "react-native";
 import RebootGameModal from "./RebootGameModal";
+import AddNewPlayerModal from "./AddNewPlayerModal";
 
 export type PlayerUpdateScore = {
     turn: number;
@@ -21,7 +22,6 @@ export type PlayerUpdateScore = {
 type PlayerAreaType = {
     setInitGame : any
 }
-
 
 const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
     const players = useSelector(
@@ -40,6 +40,7 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
         });
     const [visibleAddScore, setVisibleAddScore] = useState<boolean>(false);
     const [visibleRebootGame, setVisibleRebootGame] = useState<boolean>(false);
+    const [visibleAddNewPlayer, setVisibleAddNewPlayer] = useState<boolean>(false);
 
     const addScore = (scoreReceived: number[]) => {
         // Add new score for turn concerned
@@ -58,6 +59,8 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
         }
         scrollViewRef.current.scrollToEnd({animated: true})
     };
+
+
 
     const openAddScoreModal = (
         isNewTurn: boolean,
@@ -88,7 +91,7 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
         <>
             <View style={{flexDirection: "row"}}>
                 <Button
-                    onPress={() => openAddScoreModal(true)}
+                    onPress={() => setVisibleAddNewPlayer(true)}
                     mode={'contained'}
                     style={{margin: 5}}
                 >
@@ -161,7 +164,16 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
                 setScoreInfo={setPlayerUpdateScore}
             />
 
-            <RebootGameModal setInitGame={setInitGame} visible={visibleRebootGame} setVisible={setVisibleRebootGame} />
+            <RebootGameModal
+                setInitGame={setInitGame}
+                visible={visibleRebootGame}
+                setVisible={setVisibleRebootGame}
+            />
+
+            <AddNewPlayerModal
+                visible={visibleAddNewPlayer}
+                setVisible={setVisibleAddNewPlayer}
+            />
 
             <Button
                 onPress={() => openAddScoreModal(true)}
