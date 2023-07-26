@@ -30,16 +30,8 @@ const AddNewPlayerModal = ({
             <Dialog
                 visible={visible}
                 onDismiss={handleCloseDialog}
-                style={{ width: '100%', marginHorizontal: 3}}>
-                {/*<Appbar.Header
-                    elevated={true}
-                    style={sylesAddScoreModal.appBar}
-                >
-                    <Appbar.BackAction onPress={() => setVisible(false)}/>
-                    <Appbar.Content
-                        title={`Recommencer une partie`}
-                    />
-                </Appbar.Header>*/}
+                style={{ width: '100%', marginHorizontal: 3}}
+            >
                 <Dialog.Title> Ajouter un nouveau joueur</Dialog.Title>
                 <Dialog.Content>
                     <TextInput
