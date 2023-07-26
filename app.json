@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "tooly game",
-    "slug": "tooly-game",
+    "slug": "my-app",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/3.png",
@@ -25,6 +25,7 @@
         "foregroundImage": "./assets/3.png",
         "backgroundColor": "#FFFFFF"
       },
+      "versionCode": 2,
       "package": "com.cgrandvauxdev.myapp"
     },
     "web": {
