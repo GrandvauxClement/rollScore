@@ -1,5 +1,5 @@
 import React, {ReactElement, useRef, useState} from 'react';
-import { Button, DataTable } from 'react-native-paper';
+import {Button, DataTable, MD2Colors, MD3Colors, MD3DarkTheme, Text} from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
 import AddScoreModal from './AddScoreModal';
@@ -12,6 +12,8 @@ import { ReduxStore, store } from '../../../redux/store';
 import {ScrollView, View} from "react-native";
 import RebootGameModal from "./RebootGameModal";
 import AddNewPlayerModal from "./AddNewPlayerModal";
+import { useTheme } from 'react-native-paper';
+
 
 export type PlayerUpdateScore = {
     turn: number;
@@ -27,6 +29,8 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
     const players = useSelector(
         (state: ReduxStore) => state.playersScore,
     ).players;
+
+    const theme = useTheme();
 
     const scrollViewRef = useRef(null);
     const arrayScore = useSelector(
@@ -108,26 +112,36 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
             <DataTable>
                 <DataTable.Header>
                     <DataTable.Title style={styles.dataTableWidthItem}>
-                        Tour
+                        <Text style={{color: theme.colors.primary}}>
+                            Tour
+                        </Text>
                     </DataTable.Title>
                     {players.map((player, index) => (
                         <DataTable.Title
                             key={index}
-                            style={styles.dataTableWidthItem}>
-                            {player.name}
+                            style={styles.dataTableWidthItem}
+                        >
+                            <Text style={{color: theme.colors.primary}}>
+                                {player.name}
+                            </Text>
                         </DataTable.Title>
                     ))}
                 </DataTable.Header>
 
-                <DataTable.Row>
+                <DataTable.Row style={{backgroundColor: MD3Colors.primary40}}>
                     <DataTable.Cell style={styles.dataTableWidthItem}>
-                        Total
+                        <Text style={{color: "#ffffff"}}>
+                            Total
+                        </Text>
                     </DataTable.Cell>
                     {players.map((player, indexBis) => (
                         <DataTable.Cell
                             style={styles.dataTableWidthItem}
-                            key={`total-cell-${indexBis}`}>
-                            {player.score}
+                            key={`total-cell-${indexBis}`}
+                        >
+                            <Text style={{color: "#ffffff"}}>
+                                {player.score}
+                            </Text>
                         </DataTable.Cell>
                     ))}
                 </DataTable.Row>
@@ -135,7 +149,10 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
                     {arrayScore.map((scoreUser, index) => (
                         <DataTable.Row key={`score-row-${index}`}>
                             <DataTable.Cell style={styles.dataTableWidthItem}>
-                                {index + 1}
+                                <Text style={{color: theme.colors.primary}}>
+                                    {index + 1}
+                                </Text>
+
                             </DataTable.Cell>
                             {scoreUser.map((num, indexBis) => (
                                 <DataTable.Cell
@@ -147,8 +164,11 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
                                             index + 1,
                                             indexBis,
                                         )
-                                    }>
-                                    {num}
+                                    }
+                                >
+                                    <Text style={{color: theme.colors.primary}}>
+                                        {num}
+                                    </Text>
                                 </DataTable.Cell>
                             ))}
                         </DataTable.Row>
