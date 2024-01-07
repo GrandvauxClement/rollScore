@@ -6,6 +6,8 @@ import * as React from 'react';
 
 import RollDice from '../views/rollDice';
 import ScoreCount from '../views/scoreCount';
+import GamesStore from "../views/gamesStore";
+import {ROAD_NAME} from "../config/roadName";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +19,7 @@ const Routes = () => {
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
 
-                        if (route.name === 'Tableau de score') {
+                        if (route.name === ROAD_NAME.tableauScore) {
                             iconName = focused
                                 ? 'ios-list'
                                 : 'ios-list-outline';
@@ -28,10 +30,21 @@ const Routes = () => {
                                     color={color}
                                 />
                             );
-                        } else if (route.name === 'Lancer de dé') {
+                        } else if (route.name === ROAD_NAME.lanceDe) {
                             iconName = focused
                                 ? 'dice-multiple'
                                 : 'dice-multiple-outline';
+                            return (
+                                <MaterialCommunityIcons
+                                    name={iconName}
+                                    size={size}
+                                    color={color}
+                                />
+                            );
+                        }else if (route.name === ROAD_NAME.allGame) {
+                            iconName = focused
+                                ? 'history'
+                                : 'history';
                             return (
                                 <MaterialCommunityIcons
                                     name={iconName}
@@ -45,8 +58,9 @@ const Routes = () => {
                     tabBarActiveTintColor: 'rgba(103, 80, 164, 1)',
                     tabBarInactiveTintColor: 'gray',
                 })}>
-                <Tab.Screen name="Tableau de score" component={ScoreCount} />
-                <Tab.Screen name="Lancer de dé" component={RollDice} />
+                <Tab.Screen name={ROAD_NAME.tableauScore} component={ScoreCount} />
+                <Tab.Screen name={ROAD_NAME.allGame} component={GamesStore} />
+                <Tab.Screen name={ROAD_NAME.lanceDe} component={RollDice} />
             </Tab.Navigator>
         </NavigationContainer>
     );

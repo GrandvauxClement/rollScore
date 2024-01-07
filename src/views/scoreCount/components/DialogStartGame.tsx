@@ -2,9 +2,10 @@ import React, { ReactElement, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Button, Dialog, Portal, TextInput, List } from 'react-native-paper';
 
-import { initPlayers } from '../../../redux/slices/playerScoreSlice';
+import {initPlayers, PlayerScoreType} from '../../../redux/slices/playerScoreSlice';
 import { store } from '../../../redux/store';
 import Player from '../class/Player';
+import {addParty} from "../../../redux/slices/gameStoreSlice";
 
 type DialogSTartGameType = {
     setInit: any;
@@ -26,8 +27,24 @@ const DialogStartGame = ({ setInit }: DialogSTartGameType): ReactElement => {
             setText('');
         }
     };
+    function generateRandomId() {
+        const timestamp = new Date().getTime().toString(36);
+        const randomPart = Math.random().toString(36).substr(2, 5);
+
+        return `${timestamp}-${randomPart}`;
+    }
     const beginGame = () => {
-        store.dispatch(initPlayers(players));
+        const id = generateRandomId();
+        store.dispatch(initPlayers({ players, gameId: id }));
+        store.dispatch(
+            addParty({
+                id: id,
+                playerScore: { players: players },
+                title: 'test',
+                createdAt: new Date().toDateString(),
+                lastPlay: new Date().toDateString(),
+            }),
+        );
         setInit(true);
         hideDialog();
     };

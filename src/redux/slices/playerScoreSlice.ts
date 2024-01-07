@@ -6,11 +6,13 @@ import {addNewPlayer, calculateTotalScorePlayers} from '../../views/scoreCount/u
 export type PlayerScoreType = {
     players: Player[];
     resumeScore: number[][];
+    gameId: number;
 };
 
 const initialState: PlayerScoreType = {
     players: [],
     resumeScore: [],
+    gameId: 0,
 };
 
 const playerScoreSlice = createSlice({
@@ -20,7 +22,8 @@ const playerScoreSlice = createSlice({
         initPlayers: (state, action) => {
             return {
                 ...state,
-                players: action.payload,
+                gameId: action.payload.gameId,
+                players: action.payload.players,
             };
         },
         setScoreForNewTurn: (state, action) => {

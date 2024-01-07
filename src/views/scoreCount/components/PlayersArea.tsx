@@ -1,4 +1,4 @@
-import React, {ReactElement, useRef, useState} from 'react';
+import React, {ReactElement, useEffect, useRef, useState} from 'react';
 import {Button, DataTable, MD2Colors, MD3Colors, MD3DarkTheme, Text} from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
@@ -13,6 +13,7 @@ import {ScrollView, View} from "react-native";
 import RebootGameModal from "./RebootGameModal";
 import AddNewPlayerModal from "./AddNewPlayerModal";
 import { useTheme } from 'react-native-paper';
+import {updatePartyScore} from "../../../redux/slices/gameStoreSlice";
 
 
 export type PlayerUpdateScore = {
@@ -30,6 +31,10 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
         (state: ReduxStore) => state.playersScore,
     ).players;
 
+    const idGame = useSelector(
+        (state: ReduxStore) => state.playersScore,
+    ).gameId;
+
     const theme = useTheme();
 
     const scrollViewRef = useRef(null);
@@ -45,6 +50,10 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
     const [visibleAddScore, setVisibleAddScore] = useState<boolean>(false);
     const [visibleRebootGame, setVisibleRebootGame] = useState<boolean>(false);
     const [visibleAddNewPlayer, setVisibleAddNewPlayer] = useState<boolean>(false);
+
+    useEffect(() => {
+        store.dispatch(updatePartyScore({gameId: idGame, players: players, resumeScore: arrayScore}))
+    }, [arrayScore, players])
 
     const addScore = (scoreReceived: number[]) => {
         // Add new score for turn concerned
