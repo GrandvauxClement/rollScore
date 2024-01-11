@@ -2,9 +2,8 @@ import {PlayerScoreType} from "./playerScoreSlice";
 import {createSlice} from "@reduxjs/toolkit";
 
 export type GameStoreType = {
-    id: number;
+    id: string;
     playerScore: PlayerScoreType;
-    title: string;
     createdAt: string;
     lastPlay: string;
 }
@@ -36,7 +35,12 @@ const gameStoreSlice = createSlice({
                     if (game.id === action.payload.gameId){
                         return {
                             ...game,
-                            playerScore: action.payload
+                            playerScore: {
+                                ...game.playerScore,
+                                title: action.payload.title ? action.payload.title : game.playerScore.title,
+                                players: action.payload.players,
+                                resumeScore: action.payload.resumeScore
+                            }
                         }
                     }
                     return game;

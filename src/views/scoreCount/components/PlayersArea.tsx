@@ -1,5 +1,5 @@
 import React, {ReactElement, useEffect, useRef, useState} from 'react';
-import {Button, DataTable, MD2Colors, MD3Colors, MD3DarkTheme, Text} from 'react-native-paper';
+import {Button, DataTable, MD3Colors, Text, Title} from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
 import AddScoreModal from './AddScoreModal';
@@ -30,17 +30,16 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
     const players = useSelector(
         (state: ReduxStore) => state.playersScore,
     ).players;
-
-    const idGame = useSelector(
+    const titleGame = useSelector(
         (state: ReduxStore) => state.playersScore,
-    ).gameId;
-
-    const theme = useTheme();
-
-    const scrollViewRef = useRef(null);
+    ).title;
     const arrayScore = useSelector(
         (state: ReduxStore) => state.playersScore,
     ).resumeScore;
+    const theme = useTheme();
+
+    const scrollViewRef = useRef(null);
+
     const [playerUpdateScoreSelected, setPlayerUpdateScore] =
         useState<PlayerUpdateScore>({
             turn: 1,
@@ -52,7 +51,7 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
     const [visibleAddNewPlayer, setVisibleAddNewPlayer] = useState<boolean>(false);
 
     useEffect(() => {
-        store.dispatch(updatePartyScore({gameId: idGame, players: players, resumeScore: arrayScore}))
+        store.dispatch(updatePartyScore({players: players, resumeScore: arrayScore}))
     }, [arrayScore, players])
 
     const addScore = (scoreReceived: number[]) => {
@@ -70,10 +69,15 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
                 }),
             );
         }
-        scrollViewRef.current.scrollToEnd({animated: true})
+        // @ts-ignore
+        scrollViewRef?.current?.scrollToEnd({animated: true})
     };
 
-
+    const defineWithCol = (): number => {
+      const minWidth = 60;
+      const maxWidth = 250;
+      return (maxWidth / players.length) > minWidth ? (maxWidth / players.length) : minWidth;
+    }
 
     const openAddScoreModal = (
         isNewTurn: boolean,
@@ -102,7 +106,9 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
 
     return (
         <>
-            <View style={{flexDirection: "row"}}>
+            <Title> {titleGame}</Title>
+            <View style={{flexDirection: "row", justifyContent: "space-between", width: "98%"}}>
+
                 <Button
                     onPress={() => setVisibleAddNewPlayer(true)}
                     mode={'contained'}
@@ -118,49 +124,50 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
                     Recommencer une partie
                 </Button>
             </View>
-            <DataTable>
-                <DataTable.Header>
-                    <DataTable.Title style={styles.dataTableWidthItem}>
-                        <Text style={{color: theme.colors.primary}}>
-                            Tour
-                        </Text>
-                    </DataTable.Title>
-                    {players.map((player, index) => (
-                        <DataTable.Title
-                            key={index}
-                            style={styles.dataTableWidthItem}
-                        >
+            <ScrollView horizontal>
+                <DataTable style={{width: '100%'}}>
+                    <DataTable.Header>
+                        <DataTable.Title style={{width: defineWithCol()}}>
                             <Text style={{color: theme.colors.primary}}>
-                                {player.name}
+                                Tour
                             </Text>
                         </DataTable.Title>
-                    ))}
-                </DataTable.Header>
+                        {players.map((player, index) => (
+                            <DataTable.Title
+                                key={index}
+                                style={{width: defineWithCol()}}
+                            >
+                                <Text style={{color: theme.colors.primary}}>
+                                    {player.name}
+                                </Text>
+                            </DataTable.Title>
+                        ))}
+                    </DataTable.Header>
 
-                <DataTable.Row style={{backgroundColor: MD3Colors.primary40}}>
-                    <DataTable.Cell style={styles.dataTableWidthItem}>
-                        <Text style={{color: "#ffffff"}}>
-                            Total
-                        </Text>
-                    </DataTable.Cell>
-                    {players.map((player, indexBis) => (
-                        <DataTable.Cell
-                            style={styles.dataTableWidthItem}
-                            key={`total-cell-${indexBis}`}
-                        >
+                    <DataTable.Row style={{backgroundColor: MD3Colors.primary40}}>
+                        <DataTable.Cell style={{width: defineWithCol()}}>
                             <Text style={{color: "#ffffff"}}>
-                                {player.score}
+                                Total
                             </Text>
                         </DataTable.Cell>
-                    ))}
-                </DataTable.Row>
-                <ScrollView ref={scrollViewRef} style={{height: "60%"}}>
-                    {arrayScore.map((scoreUser, index) => (
-                        <DataTable.Row key={`score-row-${index}`}>
-                            <DataTable.Cell style={styles.dataTableWidthItem}>
-                                <Text style={{color: theme.colors.primary}}>
-                                    {index + 1}
+                        {players.map((player, indexBis) => (
+                            <DataTable.Cell
+                                style={{width: defineWithCol()}}
+                                key={`total-cell-${indexBis}`}
+                            >
+                                <Text style={{color: "#ffffff"}}>
+                                    {player.score}
                                 </Text>
+                            </DataTable.Cell>
+                        ))}
+                    </DataTable.Row>
+                    <ScrollView ref={scrollViewRef} style={{height: "60%"}}>
+                        {arrayScore.map((scoreUser, index) => (
+                            <DataTable.Row key={`score-row-${index}`}>
+                                <DataTable.Cell style={styles.dataTableWidthItem}>
+                                    <Text style={{color: theme.colors.primary}}>
+                                        {index + 1}
+                                    </Text>
 
                             </DataTable.Cell>
                             {scoreUser.map((num, indexBis) => (
@@ -184,7 +191,9 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
                     ))}
                 </ScrollView>
 
-            </DataTable>
+                </DataTable>
+            </ScrollView>
+
             <AddScoreModal
                 addScore={addScore}
                 visible={visibleAddScore}

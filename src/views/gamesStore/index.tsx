@@ -4,11 +4,12 @@ import {styles} from "../../generalStyle";
 import {Text} from "react-native-paper";
 import {useSelector} from "react-redux";
 import ResumeGameItem from "./components/ResumeGameItem";
-import {GameStoreType, removeAllPartys} from "../../redux/slices/gameStoreSlice";
-import {store} from "../../redux/store";
+import {GameStoreType} from "../../redux/slices/gameStoreSlice";
 
 const GamesStore = ({navigation}: {navigation: any}):ReactElement => {
-   // store.dispatch(removeAllPartys());
+    /*store.dispatch(removeAllPartys());
+    store.dispatch(rebootGameWithoutPlayer());*/
+
     // @ts-ignore
     const allGames = useSelector((state) => state.gameStore.games);
 

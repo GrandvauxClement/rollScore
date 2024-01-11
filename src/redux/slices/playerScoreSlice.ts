@@ -7,12 +7,14 @@ export type PlayerScoreType = {
     players: Player[];
     resumeScore: number[][];
     gameId: number;
+    title: string;
 };
 
 const initialState: PlayerScoreType = {
     players: [],
     resumeScore: [],
     gameId: 0,
+    title: new Date().toLocaleDateString()
 };
 
 const playerScoreSlice = createSlice({
@@ -22,6 +24,7 @@ const playerScoreSlice = createSlice({
         initPlayers: (state, action) => {
             return {
                 ...state,
+                title: action.payload.title,
                 gameId: action.payload.gameId,
                 players: action.payload.players,
             };
@@ -63,7 +66,7 @@ const playerScoreSlice = createSlice({
                 ...initialState
             }
         },
-        rebootGameWithPlayer : (state) => {
+        rebootGameWithPlayer : (state, action) => {
 
             let resetPlayer = state.players.map(player => ({
                 ...player,
@@ -76,7 +79,13 @@ const playerScoreSlice = createSlice({
         },
         addNewPlayerRedux: (state, action) => {
             return addNewPlayer(action.payload.name, [...state.players], [...state.resumeScore]) ;
-        }
+        },
+        updateTitleRedux : (state, action) => {
+            return {
+                ...state,
+                title: action.payload
+            }
+        },
 
     },
 });
@@ -87,7 +96,8 @@ export const {
     updateScoreForSpecificTurn,
     rebootGameWithoutPlayer,
     rebootGameWithPlayer,
-    addNewPlayerRedux
+    addNewPlayerRedux,
+    updateTitleRedux
 } = playerScoreSlice.actions;
 
 export default playerScoreSlice.reducer;

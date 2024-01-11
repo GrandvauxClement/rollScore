@@ -18,12 +18,12 @@ export const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },
     dataTableWidthItem: {
-        width: 300,
+        minWidth: 120,
+        width: "auto",
         color: 'red',
     },
 });

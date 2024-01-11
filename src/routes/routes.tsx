@@ -1,19 +1,23 @@
+import * as React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import * as React from 'react';
+import {DefaultTheme, DarkTheme, NavigationContainer} from '@react-navigation/native';
 
 import RollDice from '../views/rollDice';
 import ScoreCount from '../views/scoreCount';
 import GamesStore from "../views/gamesStore";
 import {ROAD_NAME} from "../config/roadName";
+import {useColorScheme} from "react-native";
+import {StatusBar} from "expo-status-bar";
+
 
 const Tab = createBottomTabNavigator();
-
 const Routes = () => {
+
+    const colorScheme = useColorScheme();
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
@@ -62,6 +66,7 @@ const Routes = () => {
                 <Tab.Screen name={ROAD_NAME.allGame} component={GamesStore} />
                 <Tab.Screen name={ROAD_NAME.lanceDe} component={RollDice} />
             </Tab.Navigator>
+            <StatusBar />
         </NavigationContainer>
     );
 };

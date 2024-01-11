@@ -13,7 +13,7 @@ const AddNewPlayerModal = ({
                              setVisible,
                          }: RebootGameModalType): ReactElement => {
 
-    const [namePlayer, setNamePlayer] = useState<string>();
+    const [namePlayer, setNamePlayer] = useState<string>('');
     const addNewPlayer = () => {
         store.dispatch(addNewPlayerRedux({name: namePlayer}));
         setNamePlayer("");
@@ -42,6 +42,7 @@ const AddNewPlayerModal = ({
                     />
                     <Button
                         onPress={addNewPlayer}
+                        disabled={namePlayer === ''}
                         mode={'contained'}
                         style={{margin: 5}}
                     >

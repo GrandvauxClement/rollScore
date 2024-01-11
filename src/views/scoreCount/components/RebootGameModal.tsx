@@ -16,15 +16,14 @@ const RebootGameModal = ({
                            setVisible,
                        }: RebootGameModalType): ReactElement => {
     const rebootGameWithoutUser = () => {
-        store.dispatch(rebootGameWithoutPlayer());
+        store.dispatch(rebootGameWithoutPlayer(''));
         setInitGame(false);
     }
 
     const rebootGameWithUser = () => {
-        store.dispatch(rebootGameWithPlayer());
+        store.dispatch(rebootGameWithPlayer('test'));
         handleCloseDialog();
     }
-    // handle click set score of an user & go next
 
     const handleCloseDialog = () => {
         setVisible(false);
@@ -35,7 +34,7 @@ const RebootGameModal = ({
             <Dialog
                 visible={visible}
                 onDismiss={handleCloseDialog}
-                style={{ width: '100%', marginHorizontal: 3}}>
+                style={{ marginHorizontal: 3}}>
                 <Appbar.Header
                     elevated={true}
                     style={sylesAddScoreModal.appBar}
@@ -48,7 +47,7 @@ const RebootGameModal = ({
                 <Dialog.Content>
                     <Text>Attention, vous allez recommencez une nouvelle partie toute vos données seront perdu</Text>
                     <Text>Vous pouvez soit recommencer avec les mêmes joueurs soit recommencer une partie de 0, choisissez l'option qui vous convient :</Text>
-                    <View style={{flexDirection: "row"}}>
+                    <View >
                         <Button
                             onPress={rebootGameWithUser}
                             mode={'contained'}
