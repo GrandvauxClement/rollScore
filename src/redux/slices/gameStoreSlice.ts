@@ -49,7 +49,6 @@ const gameStoreSlice = createSlice({
         },
         removePartyById: (state, action) => {
             const games = state.games.filter(game => game.id !== action.payload);
-
             return {
                 games: games
             };

@@ -121,7 +121,7 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
                     mode={'contained'}
                     style={{margin: 5}}
                 >
-                    Recommencer une partie
+                    Recommencer
                 </Button>
             </View>
             <ScrollView horizontal>
@@ -169,27 +169,27 @@ const PlayersArea = ({setInitGame}: PlayerAreaType): ReactElement => {
                                         {index + 1}
                                     </Text>
 
-                            </DataTable.Cell>
-                            {scoreUser.map((num, indexBis) => (
-                                <DataTable.Cell
-                                    style={styles.dataTableWidthItem}
-                                    key={`score-cell-${indexBis}`}
-                                    onPress={() =>
-                                        openAddScoreModal(
-                                            false,
-                                            index + 1,
-                                            indexBis,
-                                        )
-                                    }
-                                >
-                                    <Text style={{color: theme.colors.primary}}>
-                                        {num}
-                                    </Text>
                                 </DataTable.Cell>
-                            ))}
-                        </DataTable.Row>
-                    ))}
-                </ScrollView>
+                                {scoreUser.map((num, indexBis) => (
+                                    <DataTable.Cell
+                                        style={styles.dataTableWidthItem}
+                                        key={`score-cell-${indexBis}`}
+                                        onPress={() =>
+                                            openAddScoreModal(
+                                                false,
+                                                index + 1,
+                                                indexBis,
+                                            )
+                                        }
+                                    >
+                                        <Text style={{color: theme.colors.primary}}>
+                                            {num}
+                                        </Text>
+                                    </DataTable.Cell>
+                                ))}
+                            </DataTable.Row>
+                        ))}
+                    </ScrollView>
 
                 </DataTable>
             </ScrollView>
