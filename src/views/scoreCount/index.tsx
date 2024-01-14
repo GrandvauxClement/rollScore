@@ -6,21 +6,29 @@ import { styles } from '../../generalStyle';
 import {useSelector} from "react-redux";
 import {ReduxStore} from "../../redux/store";
 
-const ScoreCount = (): ReactElement => {
-    const players = useSelector(
+type ScoreCountType = {
+    route: any;
+}
+const ScoreCount = ({route}: ScoreCountType): ReactElement => {
+    const playersScore = useSelector(
         (state: ReduxStore) => state.playersScore,
-    ).players;
-
+    );
+    const routeParams = route.params;
     const [init, setInit] = useState(false);
 
     useEffect(() => {
-        setInit(players.length > 0);
-    }, [players]);
-
+        setInit(playersScore.players.length > 0);
+    }, [playersScore]);
 
     return (
         <View style={styles.container}>
-            {!init ? <DialogStartGame setInit={setInit} /> : <PlayersArea setInitGame={setInit}/>}
+            {!init ?
+                <DialogStartGame
+                    setInit={setInit}
+                    autoOpen={routeParams?.autoOpenModal ? routeParams?.autoOpenModal: false}
+                /> :
+                <PlayersArea />
+            }
         </View>
     );
 };

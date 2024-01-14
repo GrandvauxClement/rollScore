@@ -21,6 +21,11 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    containerSpaceAround: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
     dataTableWidthItem: {
         minWidth: 120,
         width: "auto",

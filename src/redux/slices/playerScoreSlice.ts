@@ -6,14 +6,14 @@ import {addNewPlayer, calculateTotalScorePlayers} from '../../views/scoreCount/u
 export type PlayerScoreType = {
     players: Player[];
     resumeScore: number[][];
-    gameId: number;
+    gameId: string;
     title: string;
 };
 
 const initialState: PlayerScoreType = {
     players: [],
     resumeScore: [],
-    gameId: 0,
+    gameId: "0",
     title: new Date().toLocaleDateString()
 };
 
@@ -73,12 +73,18 @@ const playerScoreSlice = createSlice({
                 score : 0
             }));
             return {
+                ...state,
                 players : resetPlayer,
                 resumeScore : []
             }
         },
         addNewPlayerRedux: (state, action) => {
-            return addNewPlayer(action.payload.name, [...state.players], [...state.resumeScore]) ;
+            const playerScore = addNewPlayer(action.payload.name, [...state.players], [...state.resumeScore]) ;
+            return {
+                ...state,
+                players: playerScore.players,
+                resumeScore: playerScore.resumeScore
+            }
         },
         updateTitleRedux : (state, action) => {
             return {

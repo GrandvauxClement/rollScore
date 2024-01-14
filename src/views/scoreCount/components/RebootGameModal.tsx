@@ -5,19 +5,16 @@ import {store} from '../../../redux/store';
 import {rebootGameWithoutPlayer, rebootGameWithPlayer} from "../../../redux/slices/playerScoreSlice";
 
 type RebootGameModalType = {
-    setInitGame: any;
     visible: boolean;
     setVisible: any;
 };
 
 const RebootGameModal = ({
-                           setInitGame,
                            visible,
                            setVisible,
                        }: RebootGameModalType): ReactElement => {
     const rebootGameWithoutUser = () => {
-        store.dispatch(rebootGameWithoutPlayer(''));
-        setInitGame(false);
+        store.dispatch(rebootGameWithoutPlayer());
     }
 
     const rebootGameWithUser = () => {

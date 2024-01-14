@@ -2,17 +2,18 @@ import React, { ReactElement, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Button, Dialog, Portal, TextInput, List } from 'react-native-paper';
 
-import {initPlayers, PlayerScoreType} from '../../../redux/slices/playerScoreSlice';
+import {initPlayers} from '../../../redux/slices/playerScoreSlice';
 import { store } from '../../../redux/store';
 import Player from '../class/Player';
 import {addParty} from "../../../redux/slices/gameStoreSlice";
 
 type DialogSTartGameType = {
     setInit: any;
+    autoOpen: boolean;
 };
 
-const DialogStartGame = ({ setInit }: DialogSTartGameType): ReactElement => {
-    const [visible, setVisible] = useState(false);
+const DialogStartGame = ({ setInit, autoOpen = false }: DialogSTartGameType): ReactElement => {
+    const [visible, setVisible] = useState(autoOpen);
     const [players, setPlayers] = useState<Player[]>([]);
     const [titleGame, setTitleGame] = useState<string>('');
     const showDialog = () => setVisible(true);

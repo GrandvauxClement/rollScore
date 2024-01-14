@@ -78,7 +78,7 @@ const AddScoreModal = ({
                     style={sylesAddScoreModal.appBar}>
                     <Appbar.BackAction onPress={() => setVisible(false)} />
                     <Appbar.Content
-                        title={`${players[indexSelected].name} - Tour : ${scoreInfo.turn}`}
+                        title={`${players[indexSelected]?.name} - Tour : ${scoreInfo.turn}`}
                     />
                 </Appbar.Header>
                 <Dialog.Content>
