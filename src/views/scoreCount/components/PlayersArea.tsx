@@ -21,19 +21,10 @@ export type PlayerUpdateScore = {
 };
 
 const PlayersArea = (): ReactElement => {
-    const players = useSelector(
-        (state: ReduxStore) => state.playersScore,
-    ).players;
-    const titleGame = useSelector(
-        (state: ReduxStore) => state.playersScore,
-    ).title;
-    const arrayScore = useSelector(
-        (state: ReduxStore) => state.playersScore,
-    ).resumeScore;
 
-    const idGame = useSelector(
+    const playerScore = useSelector(
         (state: ReduxStore) => state.playersScore,
-    ).gameId;
+    );
     const theme = useTheme();
 
     const scrollViewRef = useRef(null);
@@ -51,18 +42,18 @@ const PlayersArea = (): ReactElement => {
 
     useEffect(() => {
         store.dispatch(updatePartyScore({
-            players: players,
-            resumeScore: arrayScore,
-            gameId: idGame
+            players: playerScore.players,
+            resumeScore: playerScore.resumeScore,
+            gameId: playerScore.gameId
         }))
 
         setWidthColDG(defineWithCol());
-    }, [arrayScore, players])
+    }, [playerScore])
 
     const addScore = (scoreReceived: number[]) => {
         // Add new score for turn concerned
         // check if this turn already Exist
-        if (playerUpdateScoreSelected.turn === arrayScore.length + 1) {
+        if (playerUpdateScoreSelected.turn === playerScore.resumeScore.length + 1) {
             //Is new turn so just add
             store.dispatch(setScoreForNewTurn(scoreReceived));
         } else {
@@ -81,10 +72,10 @@ const PlayersArea = (): ReactElement => {
     const defineWithCol = (): number => {
         const minWidth = 60;
         const maxWidth = 360;
-        if (players.length === 0){
+        if (playerScore.players.length === 0){
             return maxWidth;
         }
-        return (maxWidth / (players.length + 1)) > minWidth ? (maxWidth / (players.length + 1)) : minWidth;
+        return (maxWidth / (playerScore.players.length + 1)) > minWidth ? (maxWidth / (playerScore.players.length + 1)) : minWidth;
     }
 
     const openAddScoreModal = (
@@ -94,18 +85,18 @@ const PlayersArea = (): ReactElement => {
     ) => {
         if (isNewTurn) {
             const arrayNewScore: number[] = [];
-            players.forEach(() => {
+            playerScore.players.forEach(() => {
                 arrayNewScore.push(0);
             });
             setPlayerUpdateScore({
-                turn: arrayScore.length + 1,
+                turn: playerScore.resumeScore.length + 1,
                 newScore: arrayNewScore,
                 indexUserSelected: 0,
             });
         } else {
             setPlayerUpdateScore({
                 turn: turnSelected,
-                newScore: arrayScore[turnSelected - 1],
+                newScore: playerScore.resumeScore[turnSelected - 1],
                 indexUserSelected: indexPlayerSelected,
             });
         }
@@ -114,7 +105,7 @@ const PlayersArea = (): ReactElement => {
 
     return (
         <>
-            <Title> {titleGame}</Title>
+            <Title> {playerScore.title}</Title>
             <View style={{flexDirection: "row", justifyContent: "space-between", width: "98%"}}>
 
                 <Button
@@ -140,7 +131,7 @@ const PlayersArea = (): ReactElement => {
                                 Tour
                             </Text>
                         </DataTable.Title>
-                        {players.map((player, index) => (
+                        {playerScore.players.map((player, index) => (
                             <DataTable.Title
                                 key={index}
                                 style={{width: widthColDG}}
@@ -158,7 +149,7 @@ const PlayersArea = (): ReactElement => {
                                 Total
                             </Text>
                         </DataTable.Cell>
-                        {players.map((player, indexBis) => (
+                        {playerScore.players.map((player, indexBis) => (
                             <DataTable.Cell
                                 style={{width: widthColDG}}
                                 key={`total-cell-${indexBis}`}
@@ -170,7 +161,7 @@ const PlayersArea = (): ReactElement => {
                         ))}
                     </DataTable.Row>
                     <ScrollView ref={scrollViewRef} style={{height: "60%"}}>
-                        {arrayScore.map((scoreUser, index) => (
+                        {playerScore.resumeScore.map((scoreUser, index) => (
                             <DataTable.Row key={`score-row-${index}`}>
                                 <DataTable.Cell style={{width: widthColDG}}>
                                     <Text style={{color: theme.colors.primary}}>

@@ -23,14 +23,12 @@ const gameStoreSlice = createSlice({
         addParty: (state, action) => {
             const games = [...state.games];
             games.push(action.payload);
-
             return {
                 games: games
             }
         },
         updatePartyScore: (state, action) => {
             return {
-                ...state,
                 games: state.games.map((game) => {
                     if (game.id === action.payload.gameId){
                         return {

@@ -29,6 +29,14 @@ const playerScoreSlice = createSlice({
                 players: action.payload.players,
             };
         },
+        changeGameActive: (state, action) => {
+            return {
+                title: action.payload.title,
+                gameId: action.payload.gameId,
+                players: action.payload.players,
+                resumeScore: action.payload.resumeScore
+            };
+        },
         setScoreForNewTurn: (state, action) => {
             const tempResumeScore = state.resumeScore.concat([action.payload]);
             const tempPlayer = state.players;
@@ -98,6 +106,7 @@ const playerScoreSlice = createSlice({
 
 export const {
     initPlayers,
+    changeGameActive,
     setScoreForNewTurn,
     updateScoreForSpecificTurn,
     rebootGameWithoutPlayer,

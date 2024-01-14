@@ -3,7 +3,7 @@ import {Button, Divider, List, Menu} from "react-native-paper";
 import {GameStoreType, removePartyById} from "../../../redux/slices/gameStoreSlice";
 import {ROAD_NAME} from "../../../config/roadName";
 import {ReduxStore, store} from "../../../redux/store";
-import {initPlayers, rebootGameWithoutPlayer} from "../../../redux/slices/playerScoreSlice";
+import {changeGameActive, rebootGameWithoutPlayer} from "../../../redux/slices/playerScoreSlice";
 import ChangeTitleGameComponent from "./ChangeTitleGameComponent";
 import {useSelector} from "react-redux";
 type ResumeGameItemType = {
@@ -22,7 +22,7 @@ const ResumeGameItem = ({ game, index, navigation }: ResumeGameItemType): ReactE
     const closeMenu = () => setVisible(false);
     const changeActiveGameAndOpen = () => {
         closeMenu();
-        store.dispatch(initPlayers(game.playerScore));
+        store.dispatch(changeGameActive(game.playerScore));
         navigation.navigate(ROAD_NAME.tableauScore);
     };
 

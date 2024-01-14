@@ -13,6 +13,7 @@ type DialogSTartGameType = {
 };
 
 const DialogStartGame = ({ setInit, autoOpen = false }: DialogSTartGameType): ReactElement => {
+
     const [visible, setVisible] = useState(autoOpen);
     const [players, setPlayers] = useState<Player[]>([]);
     const [titleGame, setTitleGame] = useState<string>('');
@@ -52,7 +53,7 @@ const DialogStartGame = ({ setInit, autoOpen = false }: DialogSTartGameType): Re
         store.dispatch(
             addParty({
                 id: id,
-                playerScore: { players: players, title: customTitle },
+                playerScore: { players: players, title: customTitle, gameId: id },
                 createdAt: new Date().toDateString(),
                 lastPlay: new Date().toDateString(),
             }),
