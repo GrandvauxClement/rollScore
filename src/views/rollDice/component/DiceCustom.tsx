@@ -1,101 +1,44 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-paper';
+import React, { ReactElement } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
+import { Image } from 'expo-image';
+import { Dice } from '../model/dice';
+import { KindDice } from '../model/kind-dice';
+import { images } from '../model/images';
 
-export default class DiceCustom extends React.Component {
-    constructor() {
-        super();
+type DiceCustomType = {
+    dice: Dice;
+};
+const DiceCustom = ({ dice }: DiceCustomType): ReactElement => {
+    const blurhash =
+        '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+    const [randomNumber, setRandomNumber] = React.useState<number>(1);
 
-        this.state = {
-            uri: require('../assets/1.png'),
-            randomNumber: 1,
-            // numHistory: [1,2,3,4,5,6]
-        };
-    }
-    getRandomNumber = () => {
-        const randomNumber = Math.floor(Math.random() * 6 + 1);
-        this.setState({
-            randomNumber,
-        });
-        return randomNumber;
+    const getRandomNumber = () => {
+        const randomNumber = Math.floor(Math.random() * dice.valueMax + 1);
+        setRandomNumber(randomNumber);
     };
 
-    // diceHistory = () => {
-    //   var numHistory = numHistory.push(this.state.randomNumber);
-    //   numHistory.toString();
-
-    //   return numHistory;
-    // }
-
-    setDiceImage = () => {
-        const randNum = this.getRandomNumber();
-        switch (randNum) {
-            case 1:
-                this.setState({
-                    uri: require('../assets/1.png'),
-                });
-                break;
-
-            case 2:
-                this.setState({
-                    uri: require('../assets/2.png'),
-                });
-                break;
-
-            case 3:
-                this.setState({
-                    uri: require('../assets/3.png'),
-                });
-                break;
-
-            case 4:
-                this.setState({
-                    uri: require('../assets/4.png'),
-                });
-                break;
-
-            case 5:
-                this.setState({
-                    uri: require('../assets/5.png'),
-                });
-                break;
-
-            case 6:
-                this.setState({
-                    uri: require('../assets/6.png'),
-                });
-                break;
-
-            default:
-        }
-    };
-
-    diceButtonPressed = () => {
-        //  this.diceHistory();
-        this.setDiceImage();
-    };
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.diceText}>
-                    Valeur du dé : {this.state.randomNumber}
-                </Text>
+    return (
+        <View style={styles.container}>
+            <Text style={styles.diceText}>Valeur du dé : {randomNumber}</Text>
+            {dice && dice.kind != KindDice.CUSTOM && (
                 <Image
                     style={{ width: 300, height: 300 }}
-                    source={this.state.uri}
+                    source={images[dice.kind][randomNumber - 1]}
+                    placeholder={blurhash}
+                    contentFit={'cover'}
+                    transition={200}
                 />
-                <TouchableOpacity onPress={this.diceButtonPressed}>
-                    <Button
-                        mode={'contained'}
-                        style={{ justifyContent: 'center' }}>
-                        Relancer le dé
-                    </Button>
-                </TouchableOpacity>
-            </View>
-        );
-    }
-}
+            )}
+            <TouchableOpacity onPress={getRandomNumber}>
+                <Button mode={'contained'} style={{ justifyContent: 'center' }}>
+                    Relancer le dé
+                </Button>
+            </TouchableOpacity>
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -114,7 +57,6 @@ const styles = StyleSheet.create({
     diceText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#1A1F38',
     },
     historyText: {
         color: '#CCCCCC',
@@ -122,3 +64,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
 });
+
+export default DiceCustom;
