@@ -21,7 +21,11 @@ const DiceCustom = ({ dice }: DiceCustomType): ReactElement => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.diceText}>Valeur du dé : {randomNumber}</Text>
+            <Text style={styles.diceText}>
+                Vous jouez avec un {dice.label}
+                {dice.kind == KindDice.CUSTOM &&
+                    ` de valeur max : ${dice.valueMax}`}
+            </Text>
             {dice && dice.kind != KindDice.CUSTOM && (
                 <Image
                     style={{ width: 300, height: 300 }}
@@ -31,6 +35,7 @@ const DiceCustom = ({ dice }: DiceCustomType): ReactElement => {
                     transition={200}
                 />
             )}
+            <Text style={styles.diceText}> Valeur du dé : {randomNumber}</Text>
             <TouchableOpacity onPress={getRandomNumber}>
                 <Button mode={'contained'} style={{ justifyContent: 'center' }}>
                     Relancer le dé

@@ -16,7 +16,7 @@ export const calculateTotalScorePlayers = (
     });
     // Total score are calculte
     return players.map((player, index) => {
-        const updatedPlayer = {...player};
+        const updatedPlayer = { ...player };
         updatedPlayer.score = stockTotal[index];
         return updatedPlayer;
     });
@@ -64,16 +64,23 @@ export const calculateTotalScoreByHisHistory = (
     return total;
 };
 
-export const addNewPlayer = (name : string, players: Player[], resumeScore: number[][]) : {players: Player[], resumeScore: number[][]} =>{
-    players.push({name: name, score: 0});
-    let tempScore = resumeScore.map((score) => {
-        let test = [...score];
-        test.push(0)
-       return test;
-    })
+export const addNewPlayer = (
+    name: string,
+    players: Player[],
+    resumeScore: number[][],
+): {
+    players: Player[];
+    resumeScore: number[][];
+} => {
+    players.push({ name: name, score: 0 });
+    let tempScore = resumeScore.map(score => {
+        let scoreCopy = [...score];
+        scoreCopy.push(0);
+        return scoreCopy;
+    });
 
     return {
         players,
-        resumeScore: tempScore
-    }
-}
+        resumeScore: tempScore,
+    };
+};

@@ -1,7 +1,10 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import Player from '../../views/scoreCount/class/Player';
-import {addNewPlayer, calculateTotalScorePlayers} from '../../views/scoreCount/utils/scoreManipulationt';
+import {
+    addNewPlayer,
+    calculateTotalScorePlayers,
+} from '../../views/scoreCount/utils/scoreManipulationt';
 
 export type PlayerScoreType = {
     players: Player[];
@@ -13,8 +16,8 @@ export type PlayerScoreType = {
 const initialState: PlayerScoreType = {
     players: [],
     resumeScore: [],
-    gameId: "0",
-    title: new Date().toLocaleDateString()
+    gameId: '0',
+    title: new Date().toLocaleDateString(),
 };
 
 const playerScoreSlice = createSlice({
@@ -34,7 +37,7 @@ const playerScoreSlice = createSlice({
                 title: action.payload.title,
                 gameId: action.payload.gameId,
                 players: action.payload.players,
-                resumeScore: action.payload.resumeScore
+                resumeScore: action.payload.resumeScore,
             };
         },
         setScoreForNewTurn: (state, action) => {
@@ -69,38 +72,71 @@ const playerScoreSlice = createSlice({
                 resumeScore: tempUpdateScore,
             };
         },
-        rebootGameWithoutPlayer : () => {
+        rebootGameWithoutPlayer: () => {
             return {
-                ...initialState
-            }
+                ...initialState,
+            };
         },
-        rebootGameWithPlayer : (state, action) => {
-
+        rebootGameWithPlayer: (state, action) => {
             let resetPlayer = state.players.map(player => ({
                 ...player,
-                score : 0
+                score: 0,
             }));
             return {
                 ...state,
-                players : resetPlayer,
-                resumeScore : []
-            }
+                players: resetPlayer,
+                resumeScore: [],
+            };
         },
         addNewPlayerRedux: (state, action) => {
-            const playerScore = addNewPlayer(action.payload.name, [...state.players], [...state.resumeScore]) ;
+            const playerScore = addNewPlayer(
+                action.payload.name,
+                [...state.players],
+                [...state.resumeScore],
+            );
             return {
                 ...state,
                 players: playerScore.players,
-                resumeScore: playerScore.resumeScore
-            }
+                resumeScore: playerScore.resumeScore,
+            };
         },
-        updateTitleRedux : (state, action) => {
+        updatePlayerNameRedux: (state, action) => {
+            const { playerSelected, newName } = action.payload;
+            let playersUpdate = state.players.map(player => {
+                if (player.name === playerSelected.name) {
+                    return { ...player, name: newName };
+                } else {
+                    return { ...player };
+                }
+            });
+
             return {
                 ...state,
-                title: action.payload
-            }
+                players: playersUpdate,
+            };
         },
-
+        deletePlayerReduxByIndex: (
+            state,
+            action: { payload: number; type: string },
+        ) => {
+            const players = state.players.filter(
+                (player, index) => index !== action.payload,
+            );
+            const resumeScores = state.resumeScore.map(score =>
+                score.filter((scoreByUser, index) => index !== action.payload),
+            );
+            return {
+                ...state,
+                players: players,
+                resumeScore: resumeScores,
+            };
+        },
+        updateTitleRedux: (state, action) => {
+            return {
+                ...state,
+                title: action.payload,
+            };
+        },
     },
 });
 
@@ -112,7 +148,9 @@ export const {
     rebootGameWithoutPlayer,
     rebootGameWithPlayer,
     addNewPlayerRedux,
-    updateTitleRedux
+    updatePlayerNameRedux,
+    deletePlayerReduxByIndex,
+    updateTitleRedux,
 } = playerScoreSlice.actions;
 
 export default playerScoreSlice.reducer;
