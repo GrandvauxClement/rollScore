@@ -33,11 +33,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "005a1faf-e8ab-4d43-b1d8-97c327047bb2"
+        "projectId": "f69f9185-425f-4434-87aa-56d037321b80"
       }
     },
     "plugins": [
       "expo-asset"
-    ]
+    ],
+    "owner": "cgrandvauxdev"
   }
 }
