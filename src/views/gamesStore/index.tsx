@@ -1,5 +1,5 @@
 import React, {ReactElement} from "react";
-import {View} from "react-native";
+import {ScrollView, View} from "react-native";
 import {styles} from "../../generalStyle";
 import {Button, Text} from "react-native-paper";
 import {useSelector} from "react-redux";
@@ -32,7 +32,7 @@ const GamesStore = ({navigation}: {navigation: any}):ReactElement => {
     }
 
   return (
-      <View style={styles.containerSpaceAround}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <View>
           <Text> Historiques de vos parties</Text>
           {sortedGames.length === 0 ?
@@ -53,7 +53,7 @@ const GamesStore = ({navigation}: {navigation: any}):ReactElement => {
           >
               Nouvelle partie
           </Button>
-      </View>
+      </ScrollView>
   )
 }
 
