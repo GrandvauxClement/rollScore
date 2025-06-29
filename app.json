@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "tooly game",
-    "slug": "toolygame",
+    "slug": "toolygamev2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/3.png",
@@ -26,14 +26,14 @@
         "backgroundColor": "#FFFFFF"
       },
       "versionCode": 5,
-      "package": "com.cgrandvauxdev.toolygame"
+      "package": "com.cgrandvauxdev.toolygamev2"
     },
     "web": {
       "favicon": "./assets/3.png"
     },
     "extra": {
       "eas": {
-        "projectId": "f69f9185-425f-4434-87aa-56d037321b80"
+        "projectId": "a5623124-17f8-4bd6-9ed4-5b247be7de66"
       }
     },
     "plugins": [
