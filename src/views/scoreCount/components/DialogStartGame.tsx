@@ -6,6 +6,7 @@ import {initPlayers} from '../../../redux/slices/playerScoreSlice';
 import { store } from '../../../redux/store';
 import Player from '../class/Player';
 import {addParty} from "../../../redux/slices/gameStoreSlice";
+import { generateRandomId } from '../utils/scoreManipulationt';
 
 type DialogSTartGameType = {
     setInit: any;
@@ -34,12 +35,7 @@ const DialogStartGame = ({ setInit, autoOpen = false }: DialogSTartGameType): Re
     const handleChangeTitleGame = (title: string) => {
       setTitleGame(title);
     }
-    function generateRandomId() {
-        const timestamp = new Date().getTime().toString(36);
-        const randomPart = Math.random().toString(36).substr(2, 5);
-
-        return `${timestamp}-${randomPart}`;
-    }
+    
     const beginGame = () => {
         const id = generateRandomId();
         const customTitle = titleGame === '' ? `Partie du ${new Date().toLocaleDateString()}` : titleGame;

@@ -17,7 +17,8 @@ const ScoreCount = ({route}: ScoreCountType): ReactElement => {
     const [init, setInit] = useState(false);
 
     useEffect(() => {
-        setInit(playersScore.players.length > 0);
+        
+      setInit(playersScore.players.length > 0);
     }, [playersScore]);
 
     return (

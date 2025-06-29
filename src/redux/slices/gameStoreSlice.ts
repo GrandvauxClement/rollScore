@@ -22,6 +22,7 @@ const gameStoreSlice = createSlice({
     reducers: {
         addParty: (state, action) => {
             const games = [...state.games];
+            
             games.push(action.payload);
             return {
                 games: games
