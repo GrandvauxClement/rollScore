@@ -73,4 +73,4 @@ Nous apprécions toutes les contributions, qu'elles soient grandes ou petites !
 License
 Indiquez ici la licence de votre choix pour votre application.
 
-© 2025 - GRANDVAUX Clément
+© 2026 - GRANDVAUX Clément
