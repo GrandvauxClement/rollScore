@@ -38,7 +38,8 @@
     "typescript": "~5.9.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "babel-preset-expo": "^55.0.17"
   },
   "private": true
 }
