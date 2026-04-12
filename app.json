@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/3.png",
         "backgroundColor": "#FFFFFF"
       },
-      "versionCode": 5,
+      "versionCode": 6,
       "package": "com.cgrandvauxdev.toolygamev2"
     },
     "web": {

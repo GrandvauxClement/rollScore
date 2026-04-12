@@ -42,10 +42,14 @@ npx expo start
 Cela lancera le serveur de développement Expo, et vous pourrez utiliser l'application en scannant le code QR avec l'application Expo Go sur votre appareil mobile ou en utilisant un émulateur/simulateur.
 
 ## Réalisation d'un Build
-Pour créer une version de production de l'application, utilisez la commande suivante :
+Pour créer une version de production de l'application,
+
+Modifier le versionCode dans app.json
+
+Puis utilisez la commande suivante :
 
 ```bash
-expo build:[android/ios]
+eas build --platform android
 ```
 Suivez les instructions pour générer un build pour Android ou iOS. Vous pouvez ensuite soumettre le build généré aux magasins d'applications respectifs.
 
